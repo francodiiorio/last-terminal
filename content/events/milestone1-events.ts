@@ -19,7 +19,10 @@ export const MILESTONE1_EVENTS: GameEvent[] = [
       { type: "unlockCommand", command: "diagnostic" },
       {
         type: "notification",
-        message: "New tools available: scan, camera, decrypt, route, diagnostic.",
+        message: {
+          en: "New tools available: scan, camera, decrypt, route, diagnostic.",
+          "es-AR": "Nuevas herramientas disponibles: scan, camera, decrypt, route, diagnostic.",
+        },
         level: "info",
       },
     ],
@@ -34,8 +37,11 @@ export const MILESTONE1_EVENTS: GameEvent[] = [
     actions: [
       {
         type: "notification",
-        message:
-          "Sensor SC-04 cross-referenced against structural stress logs. Likely cause: a micro-fracture flexing near the array mount. No personnel signature detected.",
+        message: {
+          en: "Sensor SC-04 cross-referenced against structural stress logs. Likely cause: a micro-fracture flexing near the array mount. No personnel signature detected.",
+          "es-AR":
+            "Sensor SC-04 cruzado con los registros de tensión estructural. Causa probable: una microfisura que flexiona cerca del montaje de la antena. No se detectó firma de personal.",
+        },
         level: "info",
       },
       { type: "setFlag", flag: "sectorCExplained", value: true },
@@ -48,7 +54,10 @@ export const MILESTONE1_EVENTS: GameEvent[] = [
     actions: [
       {
         type: "notification",
-        message: "LIFE SUPPORT OFFLINE -- atmospheric reserve drawing down. Re-enable when able.",
+        message: {
+          en: "LIFE SUPPORT OFFLINE -- atmospheric reserve drawing down. Re-enable when able.",
+          "es-AR": "SOPORTE VITAL FUERA DE LÍNEA -- la reserva atmosférica se está agotando. Reactivalo cuando puedas.",
+        },
         level: "critical",
       },
     ],

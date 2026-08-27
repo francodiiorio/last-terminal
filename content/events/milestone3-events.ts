@@ -27,7 +27,10 @@ export const MILESTONE3_EVENTS: GameEvent[] = [
       { type: "unlockCommand", command: "conclude" },
       {
         type: "notification",
-        message: "Enough is on the record to close this session. Run 'conclude' when ready.",
+        message: {
+          en: "Enough is on the record to close this session. Run 'conclude' when ready.",
+          "es-AR": "Ya hay suficiente en el registro para cerrar esta sesión. Ejecutá 'conclude' cuando quieras.",
+        },
         level: "info",
       },
     ],

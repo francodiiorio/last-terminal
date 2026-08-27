@@ -16,12 +16,12 @@ describe("runEventCheck", () => {
         id: "wake",
         once: true,
         conditions: [{ type: "flag", flag: "wokeUp", equals: true }],
-        actions: [{ type: "notification", message: "hello" }],
+        actions: [{ type: "notification", message: { en: "hello", "es-AR": "hola" } }],
       },
     ];
     const { effects, newlyFiredOnceIds } = runEventCheck(events, world({ flags: { wokeUp: true } }), new Set());
     expect(newlyFiredOnceIds).toEqual(["wake"]);
-    expect(effects.notifications).toEqual([{ message: "hello", level: "info" }]);
+    expect(effects.notifications).toEqual([{ message: { en: "hello", "es-AR": "hola" }, level: "info" }]);
   });
 
   it("does not refire a once event already recorded as fired", () => {
@@ -30,7 +30,7 @@ describe("runEventCheck", () => {
         id: "wake",
         once: true,
         conditions: [{ type: "flag", flag: "wokeUp", equals: true }],
-        actions: [{ type: "notification", message: "hello" }],
+        actions: [{ type: "notification", message: { en: "hello", "es-AR": "hola" } }],
       },
     ];
     const { effects, newlyFiredOnceIds } = runEventCheck(
@@ -62,7 +62,9 @@ describe("runEventCheck", () => {
         id: "ambient-warning",
         once: false,
         conditions: [{ type: "power", system: "life-support", state: "off" }],
-        actions: [{ type: "notification", message: "LIFE SUPPORT OFFLINE", level: "critical" }],
+        actions: [
+          { type: "notification", message: { en: "LIFE SUPPORT OFFLINE", "es-AR": "SOPORTE VITAL FUERA DE LÍNEA" }, level: "critical" },
+        ],
       },
     ];
     const w = world({ power: { "life-support": "off" } });

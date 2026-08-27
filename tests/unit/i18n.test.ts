@@ -106,6 +106,35 @@ describe("terminal command output follows the settings language", () => {
   });
 });
 
+describe("event-driven notifications are localized (regression: they used to be hardcoded English)", () => {
+  beforeEach(() => {
+    useGameStore.getState().newGame();
+    useGameStore.getState().setLanguage("en");
+  });
+
+  it("a notification fired by an event renders in the current language", () => {
+    useGameStore.getState().setLanguage("es-AR");
+    useGameStore.getState().runCommand("cat /engineering/power-log.txt");
+
+    const notifications = useGameStore.getState().station.notifications;
+    const toolsNotification = notifications.find((n) => n.message.en.startsWith("New tools available"));
+    expect(toolsNotification).toBeDefined();
+    expect(pick(toolsNotification!.message, "es-AR")).toContain("Nuevas herramientas disponibles");
+  });
+
+  it("a notification's stored message re-localizes on demand rather than being baked in at creation", () => {
+    // fires while still in English
+    useGameStore.getState().runCommand("cat /engineering/power-log.txt");
+    const notifications = useGameStore.getState().station.notifications;
+    const toolsNotification = notifications.find((n) => n.message.en.startsWith("New tools available"));
+    expect(toolsNotification).toBeDefined();
+
+    // the same stored NotificationItem resolves in Spanish once picked with that language --
+    // it was never collapsed to a plain string at creation time.
+    expect(pick(toolsNotification!.message, "es-AR")).toContain("Nuevas herramientas disponibles");
+  });
+});
+
 describe("language is a standalone localStorage preference, not part of the save snapshot", () => {
   beforeEach(() => {
     useGameStore.getState().newGame();

@@ -1,10 +1,11 @@
 import type { NotificationLevel } from "@/core/events/types";
+import type { Localized } from "@/core/language";
 
 export type StationScene = "boot" | "desktop";
 
 export interface NotificationItem {
   id: string;
-  message: string;
+  message: Localized<string>;
   level: NotificationLevel;
   createdAtMinutes: number;
 }

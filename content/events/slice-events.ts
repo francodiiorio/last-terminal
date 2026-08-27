@@ -15,7 +15,10 @@ export const SLICE_EVENTS: GameEvent[] = [
     actions: [
       {
         type: "notification",
-        message: "MOTION SENSOR SC-04 -- SECTOR C. Cross-referencing archived incident data.",
+        message: {
+          en: "MOTION SENSOR SC-04 -- SECTOR C. Cross-referencing archived incident data.",
+          "es-AR": "SENSOR DE MOVIMIENTO SC-04 -- SECTOR C. Cruzando datos con incidentes archivados.",
+        },
         level: "warning",
       },
       { type: "setFlag", flag: "sectorCAlertTriggered", value: true },
@@ -28,7 +31,10 @@ export const SLICE_EVENTS: GameEvent[] = [
     actions: [
       {
         type: "notification",
-        message: "INCOMING TRANSMISSION -- UNREGISTERED SOURCE.",
+        message: {
+          en: "INCOMING TRANSMISSION -- UNREGISTERED SOURCE.",
+          "es-AR": "TRANSMISIÓN ENTRANTE -- FUENTE NO REGISTRADA.",
+        },
         level: "critical",
       },
       { type: "setFlag", flag: "unknownTransmissionReceived", value: true },

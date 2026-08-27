@@ -1,4 +1,5 @@
 import type { FlagValue } from "@/core/flags";
+import type { Localized } from "@/core/language";
 
 export type PowerState = "on" | "off";
 export type NotificationLevel = "info" | "warning" | "critical";
@@ -12,7 +13,7 @@ export type Condition =
 
 export type Action =
   | { type: "setFlag"; flag: string; value: FlagValue }
-  | { type: "notification"; message: string; level?: NotificationLevel }
+  | { type: "notification"; message: Localized<string>; level?: NotificationLevel }
   | { type: "unlockFile"; fileId: string }
   | { type: "unlockApp"; appId: string }
   | { type: "unlockCommand"; command: string }
@@ -37,7 +38,7 @@ export interface EventWorldState {
 
 export interface EventEffects {
   setFlags: Array<{ flag: string; value: FlagValue }>;
-  notifications: Array<{ message: string; level: NotificationLevel }>;
+  notifications: Array<{ message: Localized<string>; level: NotificationLevel }>;
   unlockedFiles: string[];
   unlockedApps: string[];
   unlockedCommands: string[];

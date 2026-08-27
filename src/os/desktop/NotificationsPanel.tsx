@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useGameStore } from "@/store";
 import { audioManager } from "@/audio/manager";
 import { useStrings } from "@/i18n/useStrings";
+import { pick } from "@/core/language";
 import "./NotificationsPanel.css";
 
 export default function NotificationsPanel() {
@@ -10,6 +11,7 @@ export default function NotificationsPanel() {
   const notifications = useGameStore((s) => s.station.notifications);
   const dismissNotification = useGameStore((s) => s.dismissNotification);
   const reducedMotion = useGameStore((s) => s.settings.reducedMotion);
+  const language = useGameStore((s) => s.settings.language);
   const seenIds = useRef(new Set<string>());
 
   useEffect(() => {
@@ -32,7 +34,7 @@ export default function NotificationsPanel() {
             exit={reducedMotion ? { opacity: 0 } : { opacity: 0, x: 24 }}
             transition={{ duration: reducedMotion ? 0.05 : 0.18 }}
           >
-            <span className="notification__message">{n.message}</span>
+            <span className="notification__message">{pick(n.message, language)}</span>
             <button
               className="notification__dismiss"
               onClick={() => dismissNotification(n.id)}

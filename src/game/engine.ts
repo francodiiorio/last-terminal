@@ -1,6 +1,7 @@
 import { runEventCheck } from "@/core/events/engine";
 import type { EventWorldState, NotificationLevel } from "@/core/events/types";
 import type { StoryFlags } from "@/core/flags";
+import type { Localized } from "@/core/language";
 import type { PowerSystemState } from "@/game/power/types";
 import { ALL_EVENTS } from "@content/events";
 
@@ -17,7 +18,7 @@ export interface EngineTickResult {
   power: PowerSystemState;
   minutesElapsed: number;
   firedOnceIds: string[];
-  notifications: Array<{ message: string; level: NotificationLevel }>;
+  notifications: Array<{ message: Localized<string>; level: NotificationLevel }>;
   unlockedFiles: string[];
   unlockedApps: string[];
   unlockedCommands: string[];

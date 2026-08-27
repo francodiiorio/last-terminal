@@ -12,7 +12,14 @@ export const MILESTONE2_EVENTS: GameEvent[] = [
     once: true,
     conditions: [{ type: "flag", flag: "read:cassius-internal-note", equals: true }],
     actions: [
-      { type: "notification", message: "CASSIUS: Acknowledged. Record open. No further comment.", level: "info" },
+      {
+        type: "notification",
+        message: {
+          en: "CASSIUS: Acknowledged. Record open. No further comment.",
+          "es-AR": "CASSIUS: Confirmado. Registro abierto. Sin comentarios adicionales.",
+        },
+        level: "info",
+      },
     ],
   },
   {
@@ -22,8 +29,11 @@ export const MILESTONE2_EVENTS: GameEvent[] = [
     actions: [
       {
         type: "notification",
-        message:
-          "CASSIUS: Outbound content flagged -- exceeds current disclosure directive. Transmitting as instructed by Systems Officer override. Logged.",
+        message: {
+          en: "CASSIUS: Outbound content flagged -- exceeds current disclosure directive. Transmitting as instructed by Systems Officer override. Logged.",
+          "es-AR":
+            "CASSIUS: Contenido saliente marcado -- excede la directiva de divulgación vigente. Transmitiendo según lo indicado por anulación de la Oficial de Sistemas. Registrado.",
+        },
         level: "warning",
       },
     ],
