@@ -4,7 +4,11 @@ import { migrateToLatest, CURRENT_SCHEMA_VERSION } from "@/persistence/migration
 import type { GameSnapshot } from "@/store/types";
 
 const SNAPSHOT: GameSnapshot = {
-  story: { flags: { wokeUp: true, sectorCAlertTriggered: false }, firedOnceIds: ["sector-c-motion-alert"] },
+  story: {
+    flags: { wokeUp: true, sectorCAlertTriggered: false },
+    firedOnceIds: ["sector-c-motion-alert"],
+    endingId: null,
+  },
   power: { systems: { "life-support": "on", terminal: "on", cameras: "off", security: "on" } },
   filesystem: { cwd: "/security", unlockedIds: [], readIds: ["engineering-power-log"] },
   apps: { unlockedIds: ["terminal", "power"] },

@@ -32,6 +32,9 @@ export function applyActions(actions: Action[], into: EventEffects = createEmpty
       case "advanceTime":
         into.minutesAdvanced += action.minutes;
         break;
+      case "ending":
+        into.endingId = action.endingId;
+        break;
     }
   }
   return into;

@@ -18,7 +18,8 @@ export type Action =
   | { type: "unlockCommand"; command: string }
   | { type: "setPower"; system: string; state: PowerState }
   | { type: "deliverMessage"; messageId: string }
-  | { type: "advanceTime"; minutes: number };
+  | { type: "advanceTime"; minutes: number }
+  | { type: "ending"; endingId: string };
 
 export interface GameEvent {
   id: string;
@@ -43,6 +44,10 @@ export interface EventEffects {
   setPower: Array<{ system: string; state: PowerState }>;
   deliveredMessages: string[];
   minutesAdvanced: number;
+  /** set once an `ending` action fires; the four ending events are mutually exclusive by
+   * construction (see content/events/milestone3-events.ts) so at most one should ever land here
+   * per tick, but last-write-wins if that invariant is ever violated by future content. */
+  endingId: string | null;
 }
 
 export function createEmptyEffects(): EventEffects {
@@ -55,5 +60,6 @@ export function createEmptyEffects(): EventEffects {
     setPower: [],
     deliveredMessages: [],
     minutesAdvanced: 0,
+    endingId: null,
   };
 }

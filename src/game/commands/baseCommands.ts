@@ -320,6 +320,21 @@ const diagnosticCommand: CommandDefinition = {
   },
 };
 
+const concludeCommand: CommandDefinition = {
+  name: "conclude",
+  description: "Close out the session and compile the final record.",
+  usage: "conclude",
+  unlockedByDefault: false,
+  run: (ctx) => {
+    const state = ctx.getState();
+    if (state.flags.sessionConcluding === true) {
+      return { output: ["Session already concluding. Awaiting resolution."] };
+    }
+    ctx.dispatch({ type: "setFlag", flag: "sessionConcluding", value: true });
+    return { output: ["CONCLUDING SESSION...", "Compiling final record."] };
+  },
+};
+
 export const BASE_COMMANDS: CommandDefinition[] = [
   helpCommand,
   statusCommand,
@@ -334,4 +349,5 @@ export const BASE_COMMANDS: CommandDefinition[] = [
   decryptCommand,
   routeCommand,
   diagnosticCommand,
+  concludeCommand,
 ];

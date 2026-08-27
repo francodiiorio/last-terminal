@@ -4,7 +4,9 @@ import { test, expect } from "@playwright/test";
  * Full vertical-slice completion path (docs/ROADMAP.md, Milestone 0):
  * new game -> terminal -> find the engineering log -> power tradeoff (cameras off,
  * security on) -> movement-alert event fires -> read the contradictory incident report ->
- * unexpected transmission arrives -> demo end screen.
+ * unexpected transmission arrives -> 'conclude' unlocks -> Silence ending (the unspoiled
+ * default outcome for a playthrough that never sends a report or risks Life Support --
+ * see docs/lore/ENDINGS.md and content/events/milestone3-events.ts).
  */
 test("vertical slice is completable end to end", async ({ page }) => {
   await page.goto("/");
@@ -42,6 +44,8 @@ test("vertical slice is completable end to end", async ({ page }) => {
 
   await runCommand("cat /communications/incoming.log");
   await expect(page.getByText(/still reading, Priya/)).toBeVisible();
+  await expect(page.getByText(/Run 'conclude' when ready/)).toBeVisible();
 
-  await expect(page.getByText("END OF DEMONSTRATION SEGMENT")).toBeVisible();
+  await runCommand("conclude");
+  await expect(page.getByText("ENDING -- SILENCE")).toBeVisible();
 });

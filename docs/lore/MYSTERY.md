@@ -36,6 +36,8 @@ AION-7's crew was actively transmitting toward the Chorus Signal's source to pro
 - The true nature/origin of the final anomalous transmission (mechanical echo vs. something else).
 - Whether the Chorus Signal's source is inert wreckage or something that can still act.
 
+Confirmed still open as of Milestone 3: the four endings (`content/endings/endings.ts`, see `TIMELINE.md`'s Milestone 3 note) resolve none of these — they're differentiated by player choices, not by revealing crew fates or the transmission's origin.
+
 ## Rule for narrative-designer content
 
 Before writing any file under `content/`, read this document and `TIMELINE.md`. Any new clue must be traceable to a real event in `TIMELINE.md`; any contradiction must be listed here as intentional. If a piece of content would resolve one of the "must stay open" items above, stop and flag it instead of writing it — that's a decision for a dedicated narrative pass, not an incidental content addition.

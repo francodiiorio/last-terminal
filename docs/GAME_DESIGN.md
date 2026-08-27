@@ -60,11 +60,11 @@ The event engine (`core/events`) is the single mechanism for "the world reacts."
 
 ## Loss conditions
 
-Last Terminal does not have a fail-and-restart death state in the traditional sense — there's no combat, no health bar. "Loss" is represented by the Resonance ending (see `docs/lore/ENDINGS.md`): mismanaging power/escalation leads to a bad-but-narratively-meaningful outcome, not a game-over screen asking to retry a checkpoint. The vertical slice does not implement any ending — it stops at an open narrative beat.
+Last Terminal does not have a fail-and-restart death state in the traditional sense — there's no combat, no health bar. "Loss" is represented by the Resonance ending (see `docs/lore/ENDINGS.md`): mismanaging power/escalation (leaving Life Support off through a long stretch of station time without ever telling anyone the truth) leads to a bad-but-narratively-meaningful outcome, not a game-over screen asking to retry a checkpoint.
 
 ## Endings
 
-Multiple narrative endings are designed in `docs/lore/ENDINGS.md` (Silence, Disclosure, Resonance, Custodian) and reached through accumulated player decisions (power allocation pattern, which records were pursued, cooperation with CASSIUS), not a single dialogue choice at the end. Endings are out of scope for the vertical slice.
+Four narrative endings from `docs/lore/ENDINGS.md` (Silence, Disclosure, Custodian, Resonance) are implemented (Milestone 3, `content/events/milestone3-events.ts`), reached through accumulated player decisions — whether the incident report was sent instead of the routine update, whether CASSIUS's internal note was found first, whether Life Support was left off for a long stretch — not a single dialogue choice at the end. Reaching the story's climax (the unknown transmission) doesn't end the session by itself: it unlocks a `conclude` terminal command, and running it is what evaluates which ending applies. This keeps everything else (Communications repair, the Camera app, the Comms inbox and drafts) reachable for as long as the player wants to keep exploring before concluding.
 
 ## Progression
 

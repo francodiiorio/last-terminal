@@ -1,4 +1,4 @@
-.demo-end {
+.ending-screen {
   position: fixed;
   inset: 0;
   z-index: 500;
@@ -9,28 +9,28 @@
   padding: var(--space-6);
 }
 
-.demo-end__panel {
+.ending-screen__panel {
   max-width: 560px;
   border: 1px solid var(--color-border-strong);
   background: var(--color-panel);
   padding: var(--space-5);
 }
 
-.demo-end__title {
+.ending-screen__title {
   color: var(--color-accent);
   letter-spacing: 0.08em;
   margin: 0 0 var(--space-4) 0;
   font-size: 15px;
 }
 
-.demo-end__body p {
+.ending-screen__body p {
   margin: 0 0 var(--space-3) 0;
   color: var(--color-text);
   font-size: 13px;
   line-height: 1.6;
 }
 
-.demo-end__button {
+.ending-screen__button {
   margin-top: var(--space-3);
   background: transparent;
   border: 1px solid var(--color-border-strong);
@@ -41,8 +41,8 @@
   font-size: 12px;
 }
 
-.demo-end__button:hover,
-.demo-end__button:focus-visible {
+.ending-screen__button:hover,
+.ending-screen__button:focus-visible {
   border-color: var(--color-accent);
   color: var(--color-accent);
   outline: none;

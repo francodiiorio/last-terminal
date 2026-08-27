@@ -19,6 +19,10 @@ This document is the authoritative sequence of events as they actually happened.
 - **MD 214 + a few hours (game start):** Reyes wakes on schedule. Station is on reduced power, most systems offline or throttled, CASSIUS still running under its old directives layered on top of new emergency ones. This is where the vertical slice begins.
 - **MD 214 + (slice epilogue, exact offset TBD by content):** An anomalous, non-repeating transmission arrives from Tantalus's bearing, distinct in structure from the recurring Chorus Signal and from any CASSIUS-originated message. It includes a short fragment that resembles a phrase from Anand-Kel's last logged personal entry. Ground truth on its origin — mechanical echo off Tantalus's structure versus something else — is intentionally undetermined in this document. Do not resolve it in content without updating this file first.
 
+## Milestone 3 note (endings)
+
+Milestone 3 (`docs/ROADMAP.md`) shipped the four endings from `docs/lore/ENDINGS.md` as a deliberate decision to **continue leaving open** the fates of Anand-Kel, Lindqvist, Faraday, and Idris, and the true origin of the MD 214 transmission (both items above). None of the four ending texts (`content/endings/endings.ts`) assert an answer to either question — Silence, Disclosure, Custodian, and Resonance are differentiated entirely by what the player did (sent the truth to Concord, understood CASSIUS's conflict, risked Life Support), not by revealing what happened to the rest of the crew. Resolving those threads remains available to a future content pass, but requires updating this document and `MYSTERY.md` first, per their existing rules.
+
 ## Rules for extending this document
 
 - Anything added here is ground truth and binds all future narrative content.

@@ -49,12 +49,13 @@ type Action =
   | { type: "unlockCommand"; command: string }
   | { type: "setPower"; system: string; state: "on" | "off" }
   | { type: "deliverMessage"; messageId: string }
-  | { type: "advanceTime"; minutes: number };
+  | { type: "advanceTime"; minutes: number }
+  | { type: "ending"; endingId: string };
 ```
 
 The engine's job is exactly two pure functions: `evaluateConditions(conditions, worldState): boolean` and `applyActions(actions, worldState): { worldState, effects }`. A thin `runEventCheck(events, worldState, firedOnceIds)` scans all events after any state-changing action, evaluates conditions, and applies actions for newly-satisfied `once` events (and every satisfied repeatable event). This runs after every store mutation that could affect conditions (flag change, power change, time advance), not on a polling timer.
 
-`endSlice`/ending-triggering actions are intentionally omitted from the v1 action union — the vertical slice ends on an open narrative beat, not a scored ending. Add an ending action type when `docs/lore/ENDINGS.md` content actually ships.
+**Endings (Milestone 3).** `{ type: "ending" }` sets `EventEffects.endingId`; `game/engine.ts`'s `runEngineTick` stops evaluating further passes once one lands and never re-enters the loop on a subsequent tick if `story.endingId` is already set (see `src/store/story.ts`). The four endings in `content/events/milestone3-events.ts` are declarative `GameEvent`s whose conditions form a provably mutually-exclusive, exhaustive partition over two flags and one power+time signal — see that file's header comment and `tests/unit/milestone3-endings.test.ts` (which checks all 16 corners of the decision cube). Reaching the story's climax does **not** trigger an ending automatically: it only unlocks a `conclude` terminal command, and running `conclude` is what actually starts ending evaluation. This is deliberate — it's what keeps Milestone 1/2 content (Communications repair, the Camera app, the Comms inbox/drafts) reachable after the climax instead of the session ending the instant it's hit.
 
 ## Commands (`src/core/commands` + `src/game` registrations)
 
@@ -75,7 +76,7 @@ interface CommandDefinition {
 }
 ```
 
-Commands are registered in a `CommandRegistry` (a Map), looked up by name at parse time. The terminal UI never contains command logic — it only feeds parsed input to the registry and renders the returned output lines. New commands (`scan`, `camera`, `decrypt`, `route`, `diagnostic`) are added by registering a new `CommandDefinition`, never by extending a growing `if/else`/`switch` in a component. See the `terminal-command` skill.
+Commands are registered in a `CommandRegistry` (a Map), looked up by name at parse time. The terminal UI never contains command logic — it only feeds parsed input to the registry and renders the returned output lines. New commands (`scan`, `camera`, `decrypt`, `route`, `diagnostic`, `conclude`) are added by registering a new `CommandDefinition`, never by extending a growing `if/else`/`switch` in a component. See the `terminal-command` skill.
 
 Parsing is a separate pure function: `parseCommandLine(input: string): { name: string; args: string[] }`, independent of the registry and the UI, unit-tested on its own.
 
@@ -112,7 +113,7 @@ interface SaveGameV1 {
   schemaVersion: 1;
   slot: string;
   updatedAt: number;
-  story: { flags: StoryFlags; firedOnceIds: string[] };
+  story: { flags: StoryFlags; firedOnceIds: string[]; endingId: string | null };
   power: { systems: Record<string, { on: boolean }> };
   filesystem: { unlockedIds: string[]; readIds: string[] };
   apps: { unlockedIds: string[] };
@@ -132,7 +133,7 @@ interface SaveGameV1 {
 
 ## Notable decisions worth flagging here (rather than re-deciding silently later)
 
-- **No `endSlice`/ending action type yet.** Endings are designed in lore but intentionally not wired into the event action union until ending content actually ships, to avoid a half-built branch structure.
+- **Endings are gated behind an explicit player action, not automatic story-flag detection.** Reaching the narrative climax only unlocks the `conclude` command (`conclude-command-unlocked` event); running it sets `sessionConcluding`, which the four ending events actually key off. Without this gate, the first ending-eligible world state reached (which for most players is the moment the climax lands) would fire "Silence" immediately and foreclose Milestone 1/2 content. See `docs/ARCHITECTURE.md`'s Endings paragraph above and `content/events/milestone3-events.ts`.
 - **Flags are a flat string-keyed bag**, not a typed union of known keys. This trades some compile-time safety for the "no narrative decisions hardcoded in engine/components" requirement — content can introduce new flags without touching TypeScript types. Typos should be caught by the `qa-gameplay` skill's reachability check (every flag a condition reads should be set by some action somewhere) — this is a process invariant `qa-gameplay` is responsible for, not (yet) an automated generic test, so don't assume CI enforces it.
 - **CASSIUS's "curated vs. raw" record pattern (see `docs/lore/MYSTERY.md`) has no special engine support.** It's achieved entirely through content (two files disagreeing), not a "trust level" system — keeping the engine narrative-agnostic.
 - **Power systems can be "locked" two different ways** (`PowerSystemDef.lockedReason` + optional `unlockRequires: Condition[]`, see `src/game/power/budget.ts`'s `isLocked`): `lockedReason` alone means permanently locked for the session (e.g. Navigation — there's no in-fiction reason to ever need it in this arc); `lockedReason` + `unlockRequires` means locked until those conditions hold, then it behaves as a normal headroom-gated toggle. This reuses the engine's `Condition` shape rather than inventing a parallel gating mechanism.

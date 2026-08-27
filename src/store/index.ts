@@ -102,6 +102,7 @@ export const useGameStore = create<GameState>()((set, get) => {
         power: s.power.systems,
         minutesElapsed: s.time.minutesElapsed,
         firedOnceIds: s.story.firedOnceIds,
+        endingId: s.story.endingId,
       });
 
       const newNotifications: NotificationItem[] = result.notifications.map((n) => ({
@@ -112,7 +113,7 @@ export const useGameStore = create<GameState>()((set, get) => {
       }));
 
       set((st) => ({
-        story: { flags: result.flags, firedOnceIds: result.firedOnceIds },
+        story: { flags: result.flags, firedOnceIds: result.firedOnceIds, endingId: result.endingId },
         power: { systems: result.power },
         time: { minutesElapsed: result.minutesElapsed },
         station: {
@@ -215,7 +216,7 @@ export const useGameStore = create<GameState>()((set, get) => {
 
     newGame: () => {
       set(() => ({
-        story: { ...INITIAL_STORY_STATE, flags: {}, firedOnceIds: [] },
+        story: { ...INITIAL_STORY_STATE, flags: {}, firedOnceIds: [], endingId: null },
         power: { systems: buildInitialSystems() },
         filesystem: { ...INITIAL_FILESYSTEM_STATE },
         terminal: { ...INITIAL_TERMINAL_STATE, output: [], history: [], unlockedCommands: [] },
@@ -228,7 +229,7 @@ export const useGameStore = create<GameState>()((set, get) => {
     exportSnapshot: (): GameSnapshot => {
       const s = get();
       return {
-        story: { flags: s.story.flags, firedOnceIds: s.story.firedOnceIds },
+        story: { flags: s.story.flags, firedOnceIds: s.story.firedOnceIds, endingId: s.story.endingId },
         power: { systems: s.power.systems },
         filesystem: { cwd: s.filesystem.cwd, unlockedIds: s.filesystem.unlockedIds, readIds: s.filesystem.readIds },
         apps: { unlockedIds: s.apps.unlockedIds },
@@ -240,7 +241,7 @@ export const useGameStore = create<GameState>()((set, get) => {
 
     loadSnapshot: (snapshot: GameSnapshot) => {
       set((s) => ({
-        story: { flags: snapshot.story.flags, firedOnceIds: snapshot.story.firedOnceIds },
+        story: { flags: snapshot.story.flags, firedOnceIds: snapshot.story.firedOnceIds, endingId: snapshot.story.endingId },
         power: { systems: snapshot.power.systems },
         filesystem: {
           cwd: snapshot.filesystem.cwd,

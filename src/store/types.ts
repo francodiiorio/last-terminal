@@ -11,7 +11,7 @@ import type { PowerSystemState } from "@/game/power/types";
 
 /** The serializable subset of state a save game captures. Mirrors docs/ARCHITECTURE.md's SaveGameV1. */
 export interface GameSnapshot {
-  story: { flags: StoryFlags; firedOnceIds: string[] };
+  story: { flags: StoryFlags; firedOnceIds: string[]; endingId: string | null };
   power: { systems: PowerSystemState };
   filesystem: { cwd: string; unlockedIds: string[]; readIds: string[] };
   apps: { unlockedIds: string[] };
