@@ -51,6 +51,12 @@ A user report ("I open a window and pressing the x doesn't close it") caught a r
 
 - **The window header's pointerdown handler captured the pointer unconditionally**, including presses that started on the close button (`src/os/windows/Window.tsx`). A real click's near-inevitable sub-pixel movement between press and release then registered as a micro-drag; with the pointer captured by the header, the browser resolved the resulting click's target to the header instead of the button underneath, so the button's `onClick` (and therefore `closeApp`) never fired. Fixed by skipping capture/drag-start entirely when the press originates on `.window__close`. Verified by reproducing the exact failure first (reverting the fix against a jitter-simulating test showed the window staying open, confirming the root cause) before confirming the fix resolves it -- `tests/e2e/window-interaction.spec.ts`, which also checks dragging by the title bar still works.
 
+A third pass, prompted by that miss, deliberately went after realistic (not synthetic-perfect) interactions -- dragging to select terminal output text, off-screen drags with a proper animation-settle wait, focus/z-index handoff between overlapping windows -- and found one more:
+
+- **Selecting terminal output text (e.g. to copy a log line) was immediately wiped out.** `TerminalApp`'s container refocused its input on any click to keep the shell feeling always-ready to type in; the mouseup that completes a text-selection drag also fires a click, so every selection was collapsed the instant it was made -- copying anything out of the terminal was effectively impossible. Fixed by skipping the refocus when `window.getSelection()` is non-empty. Confirmed the fix by first proving selection worked at all in the test environment (selecting plain, definitely-unblocked text on a bare page succeeded) before narrowing down to this component's own refocus-on-click as the specific cause -- `tests/e2e/terminal-selection.spec.ts`.
+
+Two more things investigated and ruled out as real bugs on this pass, after appearing to fail at first: an off-screen window drag looked like it clamped to a negative `y`, but that was this session's own test reading the window's position before its open animation had settled, not the app -- a properly-sequenced check showed the clamp landing exactly on the intended minimum; and overlapping-window z-index handoff (bringing a background window to front by clicking its title) works correctly.
+
 ## Explicitly out of scope until named otherwise
 
 - Any 3D/avatar movement.

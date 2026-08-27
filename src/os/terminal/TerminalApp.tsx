@@ -58,8 +58,16 @@ export default function TerminalApp() {
     }
   }
 
+  function handleTerminalClick() {
+    // Don't steal focus back to the input if this click is the tail end of the user
+    // dragging to select output text (e.g. to copy a log line) -- refocusing collapses
+    // whatever they just selected before they can copy it.
+    if ((window.getSelection()?.toString().length ?? 0) > 0) return;
+    inputRef.current?.focus();
+  }
+
   return (
-    <div className="terminal" onClick={() => inputRef.current?.focus()}>
+    <div className="terminal" onClick={handleTerminalClick}>
       <div className="terminal__output" ref={outputRef} role="log" aria-live="polite">
         {output.map((line) => (
           <p key={line.id} className={`terminal__line terminal__line--${line.kind}`}>
