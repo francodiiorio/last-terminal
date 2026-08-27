@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useGameStore } from "@/store";
 import { evaluateConditions } from "@/core/conditions";
 import { pick } from "@/core/language";
+import { paragraphsFrom } from "@/core/text";
 import { MESSAGES } from "@content/emails/messages";
 import { OUTBOUND_DRAFTS } from "@content/emails/drafts";
 import { TIME_COSTS } from "@/core/time";
@@ -67,7 +68,7 @@ export default function CommsApp() {
               <p>
                 <strong>{pick(selected.subject, language)}</strong>
               </p>
-              {pick(selected.body, language).map((line, i) => (
+              {paragraphsFrom(pick(selected.body, language)).map((line, i) => (
                 <p key={i}>{line}</p>
               ))}
             </>

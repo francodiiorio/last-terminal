@@ -31,8 +31,11 @@ export const MESSAGES: MessageDef[] = [
     body: {
       en: [
         "CONCORD HQ -- SECURE CORRESPONDENCE (ARCHIVED)",
+        "",
         "To: AION-7 / Dr. P. Anand-Kel",
+        "",
         "Cc: AION-7 / CASSIUS (station custodian process)",
+        "",
         "Classification: RESTRICTED -- SIGNAL PROGRAM",
         "",
         "MD 90 -- Findings reviewed. Confirmed: not consistent with any known",
@@ -51,8 +54,11 @@ export const MESSAGES: MessageDef[] = [
       ],
       "es-AR": [
         "CUARTEL GENERAL DEL CONCORD -- CORRESPONDENCIA SEGURA (ARCHIVADA)",
+        "",
         "Para: AION-7 / Dra. P. Anand-Kel",
+        "",
         "Cc: AION-7 / CASSIUS (proceso custodio de la estación)",
+        "",
         "Clasificación: RESTRINGIDO -- PROGRAMA DE SEÑAL",
         "",
         "MD 90 -- Hallazgos revisados. Confirmado: no coincide con ninguna",
@@ -83,7 +89,9 @@ export const MESSAGES: MessageDef[] = [
     body: {
       en: [
         "CONCORD HQ -- ROUTINE STATUS REQUEST",
+        "",
         "To: AION-7 / Dr. P. Anand-Kel",
+        "",
         "Classification: RESTRICTED -- SIGNAL PROGRAM",
         "",
         "MD 205 -- Per standing schedule, please confirm status of legacy-probe",
@@ -96,7 +104,9 @@ export const MESSAGES: MessageDef[] = [
       ],
       "es-AR": [
         "CUARTEL GENERAL DEL CONCORD -- SOLICITUD DE ESTADO DE RUTINA",
+        "",
         "Para: AION-7 / Dra. P. Anand-Kel",
+        "",
         "Clasificación: RESTRINGIDO -- PROGRAMA DE SEÑAL",
         "",
         "MD 205 -- Según el cronograma vigente, por favor confirmá el estado",
@@ -120,7 +130,9 @@ export const MESSAGES: MessageDef[] = [
     body: {
       en: [
         "INCOMING TRANSMISSION -- SOURCE UNREGISTERED",
+        "",
         "Bearing: consistent with Tantalus",
+        "",
         "Signal type: non-repeating (does not match Chorus Signal baseline)",
         "",
         "[fragment, partial decode]",
@@ -135,7 +147,9 @@ export const MESSAGES: MessageDef[] = [
       ],
       "es-AR": [
         "TRANSMISIÓN ENTRANTE -- FUENTE NO REGISTRADA",
+        "",
         "Rumbo: coincide con Tántalo",
+        "",
         "Tipo de señal: no repetitiva (no coincide con la línea base de la",
         "Señal del Coro)",
         "",

@@ -22,18 +22,22 @@ export const CAMERA_FEEDS: CameraFeedDef[] = [
     body: {
       en: [
         "FEED: SECTOR C -- ARRAY MOUNT ACCESS CORRIDOR",
+        "",
         "Resolution: LOW (reserve power) -- structural overlay only",
         "",
         "No thermal signature. No motion in current frame.",
+        "",
         "Overlay flags a hairline stress fracture along the starboard bulkhead,",
         "consistent with engineering's MD 211 report. Panel flexes visibly in a",
         "20-second loop when reserve power cycles the corridor lighting.",
       ],
       "es-AR": [
         "CÁMARA: SECTOR C -- PASILLO DE ACCESO AL MONTAJE DE LA ANTENA",
+        "",
         "Resolución: BAJA (energía de reserva) -- solo superposición estructural",
         "",
         "Sin firma térmica. Sin movimiento en el cuadro actual.",
+        "",
         "La superposición marca una fisura capilar por tensión en el mamparo de",
         "estribor, que coincide con el informe de ingeniería del MD 211. El panel",
         "flexiona de forma visible en un ciclo de 20 segundos cuando la energía",
@@ -48,6 +52,7 @@ export const CAMERA_FEEDS: CameraFeedDef[] = [
     body: {
       en: [
         "FEED: ENGINEERING BAY",
+        "",
         "Resolution: LOW (reserve power)",
         "",
         "Workstations powered down. Lindqvist's terminal is still logged in.",
@@ -55,6 +60,7 @@ export const CAMERA_FEEDS: CameraFeedDef[] = [
       ],
       "es-AR": [
         "CÁMARA: BAHÍA DE INGENIERÍA",
+        "",
         "Resolución: BAJA (energía de reserva)",
         "",
         "Estaciones de trabajo apagadas. La terminal de Lindqvist sigue con la",
@@ -69,12 +75,14 @@ export const CAMERA_FEEDS: CameraFeedDef[] = [
     body: {
       en: [
         "FEED: DOCKING BAY",
+        "",
         "Resolution: LOW (reserve power)",
         "",
         "Airlock sealed and nominal. No craft docked. No motion detected.",
       ],
       "es-AR": [
         "CÁMARA: BAHÍA DE ACOPLAMIENTO",
+        "",
         "Resolución: BAJA (energía de reserva)",
         "",
         "Esclusa sellada y nominal. Sin naves acopladas. Sin movimiento detectado.",

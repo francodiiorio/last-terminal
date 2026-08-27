@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useGameStore } from "@/store";
 import { evaluateConditions } from "@/core/conditions";
 import { pick } from "@/core/language";
+import { paragraphsFrom } from "@/core/text";
 import { CAMERA_FEEDS } from "@content/cameras/feeds";
 import { TIME_COSTS } from "@/core/time";
 import { useStrings } from "@/i18n/useStrings";
@@ -47,7 +48,7 @@ export default function CameraApp() {
         {selectedFeed && !feedOnline && <p className="camera-app__denied">{t.camera.accessDenied}</p>}
         {selectedFeed &&
           feedOnline &&
-          pick(selectedFeed.body, language).map((line, i) => <p key={i}>{line}</p>)}
+          paragraphsFrom(pick(selectedFeed.body, language)).map((line, i) => <p key={i}>{line}</p>)}
       </div>
     </div>
   );
