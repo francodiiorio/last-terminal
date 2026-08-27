@@ -17,7 +17,7 @@ function makeHarness(overrides: Partial<CommandGameStateView> = {}) {
     cwd: "/",
     unlockedCommands: [],
     unlockedFileIds: [],
-    whoami: "REYES",
+    language: "en",
     minutesElapsed: 0,
     ...overrides,
   };

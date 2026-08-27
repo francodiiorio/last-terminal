@@ -1,9 +1,11 @@
 import { AnimatePresence } from "framer-motion";
 import { useGameStore } from "@/store";
-import { APP_REGISTRY } from "@/os/apps/registry";
+import { APP_REGISTRY, getAppTitle } from "@/os/apps/registry";
+import { useStrings } from "@/i18n/useStrings";
 import Window from "@/os/windows/Window";
 
 export default function WindowManager() {
+  const t = useStrings();
   const openIds = useGameStore((s) => s.apps.openIds);
 
   return (
@@ -12,7 +14,7 @@ export default function WindowManager() {
         const def = APP_REGISTRY[id];
         if (!def) return null;
         return (
-          <Window key={id} id={id} title={def.title} defaultPosition={def.defaultPosition}>
+          <Window key={id} id={id} title={getAppTitle(t, id)} defaultPosition={def.defaultPosition}>
             {def.render()}
           </Window>
         );

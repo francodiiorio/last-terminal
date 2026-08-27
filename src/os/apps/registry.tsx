@@ -4,10 +4,10 @@ import PowerApp from "@/os/apps/PowerApp";
 import CameraApp from "@/os/apps/CameraApp";
 import CommsApp from "@/os/apps/CommsApp";
 import SettingsApp from "@/os/apps/SettingsApp";
+import type { Strings } from "@/i18n";
 
 export interface AppDef {
   id: string;
-  title: string;
   icon: string;
   defaultPosition: { x: number; y: number };
   render: () => ReactNode;
@@ -16,37 +16,37 @@ export interface AppDef {
 export const APP_REGISTRY: Record<string, AppDef> = {
   terminal: {
     id: "terminal",
-    title: "TERMINAL",
     icon: "[>_]",
     defaultPosition: { x: 72, y: 64 },
     render: () => <TerminalApp />,
   },
   power: {
     id: "power",
-    title: "POWER GRID",
     icon: "[kW]",
     defaultPosition: { x: 660, y: 110 },
     render: () => <PowerApp />,
   },
   cameras: {
     id: "cameras",
-    title: "CAMERAS",
     icon: "[CAM]",
     defaultPosition: { x: 660, y: 420 },
     render: () => <CameraApp />,
   },
   comms: {
     id: "comms",
-    title: "COMMS",
     icon: "[@]",
     defaultPosition: { x: 72, y: 460 },
     render: () => <CommsApp />,
   },
   settings: {
     id: "settings",
-    title: "SETTINGS",
     icon: "[::]",
     defaultPosition: { x: 900, y: 460 },
     render: () => <SettingsApp />,
   },
 };
+
+/** App titles are localized UI chrome (see src/i18n) -- looked up by app id, not stored on AppDef. */
+export function getAppTitle(t: Strings, id: string): string {
+  return (t.appTitles as Record<string, string>)[id] ?? id;
+}

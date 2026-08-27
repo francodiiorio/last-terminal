@@ -13,6 +13,7 @@ import { audioManager } from "@/audio/manager";
 import { parseCommandLine } from "@/core/commands/parser";
 import type { CommandContext, CommandDispatchAction, CommandGameStateView } from "@/core/commands/types";
 import { createCommandRegistry } from "@/game/commands/registry";
+import { stringsFor } from "@/i18n";
 
 const commandRegistry = createCommandRegistry();
 
@@ -27,7 +28,7 @@ function buildCommandStateView(state: GameState): CommandGameStateView {
     cwd: state.filesystem.cwd,
     unlockedCommands: state.terminal.unlockedCommands,
     unlockedFileIds: state.filesystem.unlockedIds,
-    whoami: "REYES -- SYSTEMS & LOGISTICS OFFICER, AION-7",
+    language: state.settings.language,
     minutesElapsed: state.time.minutesElapsed,
   };
 }
@@ -146,11 +147,13 @@ export const useGameStore = create<GameState>()((set, get) => {
         },
       }));
 
+      const t = stringsFor(get().settings.language);
+
       if (get().power.systems.terminal === "off") {
         set((s) => ({
           terminal: {
             ...s.terminal,
-            output: [...s.terminal.output, makeOutputLine("TOS TERMINAL OFFLINE -- re-enable Terminal power to resume.", "error")],
+            output: [...s.terminal.output, makeOutputLine(t.terminal.offlineMessage, "error")],
           },
         }));
         return;
@@ -167,7 +170,7 @@ export const useGameStore = create<GameState>()((set, get) => {
         set((s) => ({
           terminal: {
             ...s.terminal,
-            output: [...s.terminal.output, makeOutputLine(`command not found: ${parsed.name}`, "error")],
+            output: [...s.terminal.output, makeOutputLine(t.commands.commandNotFound(parsed.name), "error")],
           },
         }));
         return;
@@ -229,6 +232,7 @@ export const useGameStore = create<GameState>()((set, get) => {
       audioManager.setMuted(muted);
     },
     setReducedMotion: (value) => set((s) => ({ settings: { ...s.settings, reducedMotion: value } })),
+    setLanguage: (language) => set((s) => ({ settings: { ...s.settings, language } })),
     dismissNotification: (id) =>
       set((s) => ({ station: { ...s.station, notifications: s.station.notifications.filter((n) => n.id !== id) } })),
 
@@ -253,7 +257,12 @@ export const useGameStore = create<GameState>()((set, get) => {
         apps: { unlockedIds: s.apps.unlockedIds },
         terminal: { unlockedCommands: s.terminal.unlockedCommands, history: s.terminal.history },
         time: { minutesElapsed: s.time.minutesElapsed },
-        settings: { volume: s.settings.volume, muted: s.settings.muted, reducedMotion: s.settings.reducedMotion },
+        settings: {
+          volume: s.settings.volume,
+          muted: s.settings.muted,
+          reducedMotion: s.settings.reducedMotion,
+          language: s.settings.language,
+        },
       };
     },
 
@@ -269,7 +278,12 @@ export const useGameStore = create<GameState>()((set, get) => {
         apps: { ...s.apps, unlockedIds: snapshot.apps.unlockedIds },
         terminal: { ...s.terminal, unlockedCommands: snapshot.terminal.unlockedCommands, history: snapshot.terminal.history, output: [] },
         time: { minutesElapsed: snapshot.time.minutesElapsed },
-        settings: { volume: snapshot.settings.volume, muted: snapshot.settings.muted, reducedMotion: snapshot.settings.reducedMotion },
+        settings: {
+          volume: snapshot.settings.volume,
+          muted: snapshot.settings.muted,
+          reducedMotion: snapshot.settings.reducedMotion,
+          language: snapshot.settings.language,
+        },
         station: { scene: "desktop", notifications: [] },
       }));
       audioManager.setMasterVolume(snapshot.settings.volume);

@@ -6,23 +6,17 @@ import { deserializeSave } from "@/persistence/save";
 import type { SaveRecord } from "@/persistence/db";
 import { formatStationTime } from "@/core/time";
 import { audioManager } from "@/audio/manager";
+import { useStrings } from "@/i18n/useStrings";
+import type { Strings } from "@/i18n";
 import "./BootScreen.css";
 
-const BOOT_LINES = [
-  "AION-7 :: TERMINAL OPERATING SYSTEM",
-  "TOS v4.1.2 -- RESERVE POWER MODE",
-  "INITIALIZING CORE SERVICES...",
-  "CASSIUS PROCESS -- ACTIVE",
-  "SYSTEMS OFFICER REYES -- STASIS CYCLE COMPLETE",
-  "AWAITING INPUT",
-];
-
-function saveLabel(record: SaveRecord): string {
+function saveLabel(record: SaveRecord, t: Strings): string {
   if (record.label) return record.label;
-  return record.slot === AUTOSAVE_SLOT ? "Autosave" : record.slot;
+  return record.slot === AUTOSAVE_SLOT ? t.boot.autosaveLabel : record.slot;
 }
 
 export default function BootScreen() {
+  const t = useStrings();
   const newGame = useGameStore((s) => s.newGame);
   const bootComplete = useGameStore((s) => s.bootComplete);
   const loadSnapshot = useGameStore((s) => s.loadSnapshot);
@@ -48,7 +42,7 @@ export default function BootScreen() {
   async function handleContinue(slot: string) {
     const snapshot = await loadGame(slot);
     if (!snapshot) {
-      setError("SAVE SLOT NOT FOUND.");
+      setError(t.boot.saveSlotNotFound);
       refreshSaves();
       return;
     }
@@ -56,7 +50,7 @@ export default function BootScreen() {
   }
 
   async function handleDelete(slot: string) {
-    if (!window.confirm("Delete this saved session? This can't be undone.")) return;
+    if (!window.confirm(t.boot.deleteConfirm)) return;
     await deleteSave(slot);
     refreshSaves();
   }
@@ -79,14 +73,14 @@ export default function BootScreen() {
       const snapshot = deserializeSave(text);
       loadSnapshot(snapshot);
     } catch (err) {
-      setError(err instanceof Error ? err.message.toUpperCase() : "IMPORT FAILED.");
+      setError(err instanceof Error ? err.message.toUpperCase() : t.boot.importFailed);
     }
   }
 
   return (
     <div className="boot-screen">
       <div className="boot-screen__lines">
-        {BOOT_LINES.map((line, i) => (
+        {t.boot.lines.map((line, i) => (
           <motion.p
             key={line}
             className={`boot-screen__line${i === 0 ? " boot-screen__line--accent" : ""}`}
@@ -111,15 +105,15 @@ export default function BootScreen() {
               {saves.map((record) => (
                 <div className="boot-screen__save-row" key={record.slot}>
                   <button className="boot-screen__button boot-screen__button--save" onClick={() => handleContinue(record.slot)}>
-                    <span className="boot-screen__save-label">{saveLabel(record)}</span>
+                    <span className="boot-screen__save-label">{saveLabel(record, t)}</span>
                     <span className="boot-screen__save-meta">
-                      {formatStationTime(record.data.time.minutesElapsed)} station time -- {new Date(record.updatedAt).toLocaleString()}
+                      {formatStationTime(record.data.time.minutesElapsed)} {t.boot.stationTimeSuffix} -- {new Date(record.updatedAt).toLocaleString()}
                     </span>
                   </button>
                   <button
                     className="boot-screen__delete"
                     onClick={() => handleDelete(record.slot)}
-                    aria-label={`Delete save ${saveLabel(record)}`}
+                    aria-label={t.boot.deleteSaveAriaLabel(saveLabel(record, t))}
                   >
                     x
                   </button>
@@ -128,10 +122,10 @@ export default function BootScreen() {
             </div>
           )}
           <button className="boot-screen__button" onClick={handleNewGame}>
-            New Session
+            {t.boot.newSessionButton}
           </button>
           <button className="boot-screen__button" onClick={handleImportClick}>
-            Import Save File
+            {t.boot.importButton}
           </button>
           <input
             ref={fileInputRef}
@@ -139,7 +133,7 @@ export default function BootScreen() {
             accept="application/json"
             className="boot-screen__file-input"
             onChange={handleFileChange}
-            aria-label="Import save file"
+            aria-label={t.boot.importFileAriaLabel}
           />
           {error && <p className="boot-screen__error">{error}</p>}
         </motion.div>

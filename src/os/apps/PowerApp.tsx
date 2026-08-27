@@ -3,9 +3,13 @@ import { useGameStore } from "@/store";
 import { canEnable, headroomKw, isLocked, totalConsumptionKw } from "@/game/power/budget";
 import { POWER_SYSTEMS, STATION_POWER_BUDGET_KW } from "@content/power/systems";
 import { audioManager } from "@/audio/manager";
+import { useStrings } from "@/i18n/useStrings";
+import { pick } from "@/core/language";
 import "./PowerApp.css";
 
 export default function PowerApp() {
+  const t = useStrings();
+  const language = useGameStore((s) => s.settings.language);
   const powerSystems = useGameStore((s) => s.power.systems);
   const flags = useGameStore((s) => s.story.flags);
   const minutesElapsed = useGameStore((s) => s.time.minutesElapsed);
@@ -38,7 +42,7 @@ export default function PowerApp() {
   return (
     <div className="power-app">
       <div className={`power-app__summary${headroom < 20 ? " power-app__summary--tight" : ""}`}>
-        <span>ALLOCATED</span>
+        <span>{t.power.allocated}</span>
         <span>
           {used} / {STATION_POWER_BUDGET_KW} kW ({headroom} kW free)
         </span>
@@ -46,15 +50,16 @@ export default function PowerApp() {
       {POWER_SYSTEMS.map((system) => {
         const isOn = powerSystems[system.id] === "on";
         const locked = isLocked(system, world);
+        const name = pick(system.name, language);
         return (
           <div className="power-row" key={system.id}>
             <div className="power-row__info">
-              <span className="power-row__name">{system.name}</span>
+              <span className="power-row__name">{name}</span>
               <span className="power-row__meta">
-                {system.consumptionKw} kW -- {locked ? system.lockedReason : system.description}
+                {system.consumptionKw} kW -- {locked ? pick(system.lockedReason!, language) : pick(system.description, language)}
               </span>
               {deniedId === system.id && !locked && (
-                <span className="power-row__denied">INSUFFICIENT HEADROOM -- free up {system.consumptionKw} kW first</span>
+                <span className="power-row__denied">{t.power.insufficientHeadroom(system.consumptionKw)}</span>
               )}
             </div>
             <button
@@ -62,9 +67,9 @@ export default function PowerApp() {
               onClick={() => handleToggle(system.id)}
               disabled={locked}
               aria-pressed={isOn}
-              aria-label={`${system.name} power ${isOn ? "on" : "off"}`}
+              aria-label={t.power.toggleAriaLabel(name, isOn)}
             >
-              {locked ? "LOCKED" : isOn ? "ON" : "OFF"}
+              {locked ? t.power.locked : isOn ? t.power.on : t.power.off}
             </button>
           </div>
         );

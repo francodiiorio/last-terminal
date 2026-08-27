@@ -2,9 +2,11 @@ import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useGameStore } from "@/store";
 import { audioManager } from "@/audio/manager";
+import { useStrings } from "@/i18n/useStrings";
 import "./NotificationsPanel.css";
 
 export default function NotificationsPanel() {
+  const t = useStrings();
   const notifications = useGameStore((s) => s.station.notifications);
   const dismissNotification = useGameStore((s) => s.dismissNotification);
   const reducedMotion = useGameStore((s) => s.settings.reducedMotion);
@@ -34,7 +36,7 @@ export default function NotificationsPanel() {
             <button
               className="notification__dismiss"
               onClick={() => dismissNotification(n.id)}
-              aria-label="Dismiss notification"
+              aria-label={t.notifications.dismissAriaLabel}
             >
               x
             </button>

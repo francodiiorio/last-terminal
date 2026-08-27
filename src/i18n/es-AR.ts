@@ -1,0 +1,196 @@
+import type { Strings } from "@/i18n/en";
+
+/**
+ * Argentine Spanish (voseo, vocabulario rioplatense). Matches `Strings` exactly -- TypeScript
+ * will refuse to compile if a key is missing or a function signature drifts from en.ts.
+ * Deliberately keeps a few loanwords/toggle labels (TOS, AION-7, CASSIUS, ON/OFF) exactly as
+ * English-language technical software does in practice; everything else is translated in full,
+ * including all special characters (á é í ó ú ñ ¿ ¡).
+ */
+export const ES_AR: Strings = {
+  boot: {
+    lines: [
+      "AION-7 :: SISTEMA OPERATIVO DE TERMINAL",
+      "TOS v4.1.2 -- MODO DE ENERGÍA DE RESERVA",
+      "INICIALIZANDO SERVICIOS PRINCIPALES...",
+      "PROCESO CASSIUS -- ACTIVO",
+      "OFICIAL DE SISTEMAS REYES -- CICLO DE ESTASIS COMPLETO",
+      "ESPERANDO ENTRADA",
+    ],
+    autosaveLabel: "Autoguardado",
+    newSessionButton: "Nueva Sesión",
+    importButton: "Importar Partida Guardada",
+    importFileAriaLabel: "Importar partida guardada",
+    saveSlotNotFound: "NO SE ENCONTRÓ LA PARTIDA GUARDADA.",
+    importFailed: "ERROR AL IMPORTAR.",
+    deleteConfirm: "¿Borrar esta sesión guardada? Esta acción no se puede deshacer.",
+    deleteSaveAriaLabel: (label: string) => `Borrar partida ${label}`,
+    stationTimeSuffix: "tiempo de estación",
+  },
+  taskbar: {
+    brand: "AION-7 / TOS",
+    pwrFree: (n: number) => `ENE ${n} kW libres`,
+    saveAsButton: "Guardar Como...",
+    exportButton: "Exportar Partida",
+    newSessionButton: "Nueva Sesión",
+    saveAsPromptLabel: "Nombre de la partida:",
+    saveAsPromptDefault: (date: string) => `Sesión ${date}`,
+    savedAsMessage: (label: string) => `Guardado como "${label}".`,
+    resetConfirm: "¿Iniciar una nueva sesión? El progreso actual se va a sobrescribir.",
+  },
+  appTitles: {
+    terminal: "TERMINAL",
+    power: "RED ELÉCTRICA",
+    cameras: "CÁMARAS",
+    comms: "COMU",
+    settings: "AJUSTES",
+  },
+  window: {
+    closeAriaLabel: (title: string) => `Cerrar ${title}`,
+  },
+  notifications: {
+    dismissAriaLabel: "Descartar notificación",
+  },
+  terminal: {
+    inputAriaLabel: "Entrada de comandos de la terminal",
+    offlineMessage: "TERMINAL TOS FUERA DE LÍNEA -- reactivá la energía de Terminal para continuar.",
+  },
+  power: {
+    allocated: "ASIGNADO",
+    insufficientHeadroom: (kw: number) => `MARGEN INSUFICIENTE -- liberá ${kw} kW primero`,
+    locked: "BLOQUEADO",
+    on: "ON",
+    off: "OFF",
+    toggleAriaLabel: (name: string, on: boolean) => `Energía de ${name} ${on ? "encendida" : "apagada"}`,
+  },
+  camera: {
+    noFeedSelected: "Ninguna cámara seleccionada.",
+    accessDenied: "ACCESO DENEGADO -- red de cámaras fuera de línea.",
+  },
+  comms: {
+    noMessages: "SIN MENSAJES -- COMUNICACIONES FUERA DE LÍNEA",
+    selectMessage: "Seleccioná un mensaje.",
+    read: "LEÍDO",
+    new: "NUEVO",
+    sent: "ENVIADO",
+    send: "ENVIAR",
+    offline: "FUERA DE LÍNEA",
+  },
+  settings: {
+    audioVolumeLabel: "Volumen de Audio",
+    muteButton: "SILENCIAR",
+    mutedButton: "SILENCIADO",
+    reducedMotionLabel: "Movimiento Reducido",
+    reducedMotionDescription: "Acorta las animaciones de ventanas y notificaciones.",
+    onLabel: "ACTIVADO",
+    offLabel: "DESACTIVADO",
+    languageLabel: "Idioma",
+  },
+  ending: {
+    restartButton: "Reiniciar Sesión",
+  },
+  commands: {
+    help: {
+      description: "Lista los comandos disponibles.",
+      header: "COMANDOS DISPONIBLES:",
+    },
+    status: {
+      description: "Muestra un resumen del estado de la estación.",
+      header: "AION-7 -- ESTADO DE LA ESTACIÓN",
+      stationTime: (t: string) => `  Tiempo de estación: ${t}`,
+      powerSystemsOn: (on: number, total: number) => `  Sistemas activos:   ${on}/${total}`,
+      powerHeadroom: (kw: number) => `  Margen disponible:  ${kw} kW`,
+      footer: "  Energía de reserva activa. Usá 'power' para la asignación.",
+    },
+    ls: {
+      description: "Lista el contenido de un directorio.",
+      notADirectory: (path: string) => `ls: no es un directorio: ${path}`,
+      empty: (path: string) => `${path}: (vacío)`,
+      lockedTag: "[BLOQUEADO]",
+    },
+    cd: {
+      description: "Cambia el directorio actual.",
+      usageError: "uso: cd <ruta>",
+      noSuchDirectory: (path: string) => `cd: no existe el directorio: ${path}`,
+    },
+    cat: {
+      description: "Lee un archivo.",
+      usageError: "uso: cat <ruta>",
+      noSuchFile: (path: string) => `cat: no existe el archivo: ${path}`,
+      accessDenied: (name: string) => `ACCESO DENEGADO: ${name} -- autorización insuficiente o sistema fuera de línea`,
+      fileEncrypted: (name: string, path: string) => `ARCHIVO ENCRIPTADO: ${name} -- ejecutá 'decrypt ${path}' primero.`,
+    },
+    clear: {
+      description: "Limpia la pantalla de la terminal.",
+    },
+    power: {
+      description: "Ve o cambia la asignación de energía.",
+      allocated: (used: number, total: number) => `ENERGÍA -- ${used}/${total} kW asignados`,
+      unknownSystem: (id: string) => `power: sistema desconocido: ${id}`,
+      usageError: "uso: power <sistema> <on|off>",
+      offline: (name: string) => `${name}: OFF`,
+      cannotEnable: (name: string, reason: string) => `${name}: NO SE PUEDE ACTIVAR -- ${reason}`,
+      insufficientPower: (name: string, need: number, have: number) =>
+        `${name}: ENERGÍA INSUFICIENTE -- requiere ${need} kW, hay ${have} kW disponibles.`,
+      freeUpHeadroom: "Desactivá otro sistema para liberar margen.",
+      online: (name: string) => `${name}: ON`,
+      statusLine: (name: string, on: boolean, kw: number) => `${name}: ${on ? "ON" : "OFF"} (${kw} kW)`,
+    },
+    whoami: {
+      description: "Muestra la identidad del usuario actual.",
+      identity: "REYES -- OFICIAL DE SISTEMAS Y LOGÍSTICA, AION-7",
+    },
+    scan: {
+      description: "Ejecuta un barrido estructural/de sensores en un sector.",
+      usageError: "uso: scan <sector>",
+      knownSectors: "Sectores conocidos: system, crew, engineering, security, communications, laboratory, archive",
+      labHeader: "BARRIDO ESTRUCTURAL -- LABORATORIO",
+      labResult: "Integridad del sello dentro de tolerancia. Sector habilitado para restaurar energía.",
+      genericHeader: (sector: string) => `BARRIDO ESTRUCTURAL -- ${sector.toUpperCase()}`,
+      genericResult: "No se detectaron anomalías.",
+    },
+    camera: {
+      description: "Muestra una cámara.",
+      availableFeeds: "CÁMARAS DISPONIBLES:",
+      unknownFeed: (id: string) => `camera: cámara desconocida: ${id}`,
+      accessDenied: (name: string) => `ACCESO DENEGADO: ${name} -- red de cámaras fuera de línea`,
+    },
+    decrypt: {
+      description: "Desencripta un archivo encriptado.",
+      usageError: "uso: decrypt <ruta>",
+      noSuchFile: (path: string) => `decrypt: no existe el archivo: ${path}`,
+      accessDenied: (name: string) => `ACCESO DENEGADO: ${name} -- autorización insuficiente o sistema fuera de línea`,
+      notEncrypted: (name: string) => `${name}: no está encriptado.`,
+      alreadyDecrypted: (name: string) => `${name}: ya fue desencriptado.`,
+      decrypted: (name: string) => `${name}: DESENCRIPTADO.`,
+      runCatHint: "Ejecutá 'cat' para leerlo.",
+    },
+    route: {
+      description: "Reencamina energía auxiliar para reparar un sistema.",
+      usageError: "uso: route <sistema>",
+      noFaultDiagnosed: "FALLÓ EL REENCAMINAMIENTO -- no hay ninguna falla diagnosticada.",
+      diagnoseFirst: "Ejecutá 'diagnostic communications' primero.",
+      alreadyRepaired: "Matriz de comunicaciones: ya está reparada.",
+      repaired: "ENERGÍA AUXILIAR REENCAMINADA -- MATRIZ DE COMUNICACIONES REPARADA.",
+      availableForAllocation: "Sistema disponible para asignación de energía.",
+      noProcedure: (target: string) => `route: no hay procedimiento de reparación para '${target}'.`,
+    },
+    diagnostic: {
+      description: "Ejecuta un diagnóstico de sistemas.",
+      stationWideHeader: "DIAGNÓSTICO -- TODA LA ESTACIÓN",
+      stationWideResult: "No hay fallas críticas fuera de los incidentes conocidos.",
+      commsHeader: "DIAGNÓSTICO -- MATRIZ DE COMUNICACIONES",
+      commsFault: "Falla aislada: acople primario cizallado durante la Cascada.",
+      commsHint: "Un reencaminamiento auxiliar debería restaurar el suministro. Ver 'route communications'.",
+      genericHeader: (target: string) => `DIAGNÓSTICO -- ${target.toUpperCase()}`,
+      genericResult: "No se detectaron fallas.",
+    },
+    conclude: {
+      description: "Cierra la sesión y compila el registro final.",
+      alreadyConcluding: "La sesión ya se está cerrando. Esperando resolución.",
+      concluding: "CERRANDO SESIÓN...",
+      compiling: "Compilando registro final.",
+    },
+    commandNotFound: (name: string) => `comando no encontrado: ${name}`,
+  },
+};

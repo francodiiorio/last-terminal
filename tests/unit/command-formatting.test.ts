@@ -17,7 +17,7 @@ function makeState(overrides: Partial<CommandGameStateView> = {}): CommandGameSt
     cwd: "/",
     unlockedCommands: ["camera"],
     unlockedFileIds: [],
-    whoami: "REYES",
+    language: "en",
     minutesElapsed: 0,
     ...overrides,
   };

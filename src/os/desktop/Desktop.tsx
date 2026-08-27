@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useGameStore } from "@/store";
-import { APP_REGISTRY } from "@/os/apps/registry";
+import { APP_REGISTRY, getAppTitle } from "@/os/apps/registry";
+import { useStrings } from "@/i18n/useStrings";
 import WindowManager from "@/os/windows/WindowManager";
 import Taskbar from "@/os/desktop/Taskbar";
 import NotificationsPanel from "@/os/desktop/NotificationsPanel";
@@ -8,6 +9,7 @@ import { audioManager } from "@/audio/manager";
 import "./Desktop.css";
 
 export default function Desktop() {
+  const t = useStrings();
   const unlockedApps = useGameStore((s) => s.apps.unlockedIds);
   const openApp = useGameStore((s) => s.openApp);
 
@@ -27,7 +29,7 @@ export default function Desktop() {
                 <span className="desktop-icon__glyph" aria-hidden="true">
                   {def.icon}
                 </span>
-                <span className="desktop-icon__label">{def.title}</span>
+                <span className="desktop-icon__label">{getAppTitle(t, id)}</span>
               </button>
             );
           })}

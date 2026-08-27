@@ -1,0 +1,195 @@
+/**
+ * Canonical English UI-chrome strings. This is the source of truth for the `Strings` shape --
+ * es-AR.ts must satisfy the exact same type, so TypeScript catches any missing translation at
+ * compile time. Narrative content (station logs, endings, messages, etc.) is localized
+ * separately, alongside its own content definitions in content/ -- see docs/ARCHITECTURE.md.
+ */
+export const EN = {
+  boot: {
+    lines: [
+      "AION-7 :: TERMINAL OPERATING SYSTEM",
+      "TOS v4.1.2 -- RESERVE POWER MODE",
+      "INITIALIZING CORE SERVICES...",
+      "CASSIUS PROCESS -- ACTIVE",
+      "SYSTEMS OFFICER REYES -- STASIS CYCLE COMPLETE",
+      "AWAITING INPUT",
+    ],
+    autosaveLabel: "Autosave",
+    newSessionButton: "New Session",
+    importButton: "Import Save File",
+    importFileAriaLabel: "Import save file",
+    saveSlotNotFound: "SAVE SLOT NOT FOUND.",
+    importFailed: "IMPORT FAILED.",
+    deleteConfirm: "Delete this saved session? This can't be undone.",
+    deleteSaveAriaLabel: (label: string) => `Delete save ${label}`,
+    stationTimeSuffix: "station time",
+  },
+  taskbar: {
+    brand: "AION-7 / TOS",
+    pwrFree: (n: number) => `PWR ${n} kW free`,
+    saveAsButton: "Save As...",
+    exportButton: "Export Save",
+    newSessionButton: "New Session",
+    saveAsPromptLabel: "Save slot name:",
+    saveAsPromptDefault: (date: string) => `Session ${date}`,
+    savedAsMessage: (label: string) => `Saved as "${label}".`,
+    resetConfirm: "Start a new session? Current progress will be overwritten.",
+  },
+  appTitles: {
+    terminal: "TERMINAL",
+    power: "POWER GRID",
+    cameras: "CAMERAS",
+    comms: "COMMS",
+    settings: "SETTINGS",
+  },
+  window: {
+    closeAriaLabel: (title: string) => `Close ${title}`,
+  },
+  notifications: {
+    dismissAriaLabel: "Dismiss notification",
+  },
+  terminal: {
+    inputAriaLabel: "Terminal command input",
+    offlineMessage: "TOS TERMINAL OFFLINE -- re-enable Terminal power to resume.",
+  },
+  power: {
+    allocated: "ALLOCATED",
+    insufficientHeadroom: (kw: number) => `INSUFFICIENT HEADROOM -- free up ${kw} kW first`,
+    locked: "LOCKED",
+    on: "ON",
+    off: "OFF",
+    toggleAriaLabel: (name: string, on: boolean) => `${name} power ${on ? "on" : "off"}`,
+  },
+  camera: {
+    noFeedSelected: "No feed selected.",
+    accessDenied: "ACCESS DENIED -- camera grid offline.",
+  },
+  comms: {
+    noMessages: "NO MESSAGES -- COMMUNICATIONS OFFLINE",
+    selectMessage: "Select a message.",
+    read: "READ",
+    new: "NEW",
+    sent: "SENT",
+    send: "SEND",
+    offline: "OFFLINE",
+  },
+  settings: {
+    audioVolumeLabel: "Audio Volume",
+    muteButton: "MUTE",
+    mutedButton: "MUTED",
+    reducedMotionLabel: "Reduced Motion",
+    reducedMotionDescription: "Shortens window/notification animations.",
+    onLabel: "ON",
+    offLabel: "OFF",
+    languageLabel: "Language",
+  },
+  ending: {
+    restartButton: "Restart Session",
+  },
+  commands: {
+    help: {
+      description: "List available commands.",
+      header: "AVAILABLE COMMANDS:",
+    },
+    status: {
+      description: "Show station status summary.",
+      header: "AION-7 -- STATION STATUS",
+      stationTime: (t: string) => `  Station time:     ${t}`,
+      powerSystemsOn: (on: number, total: number) => `  Power systems on: ${on}/${total}`,
+      powerHeadroom: (kw: number) => `  Power headroom:   ${kw} kW`,
+      footer: "  Reserve power engaged. See 'power' for allocation.",
+    },
+    ls: {
+      description: "List directory contents.",
+      notADirectory: (path: string) => `ls: not a directory: ${path}`,
+      empty: (path: string) => `${path}: (empty)`,
+      lockedTag: "[LOCKED]",
+    },
+    cd: {
+      description: "Change current directory.",
+      usageError: "usage: cd <path>",
+      noSuchDirectory: (path: string) => `cd: no such directory: ${path}`,
+    },
+    cat: {
+      description: "Read a file.",
+      usageError: "usage: cat <path>",
+      noSuchFile: (path: string) => `cat: no such file: ${path}`,
+      accessDenied: (name: string) => `ACCESS DENIED: ${name} -- insufficient clearance or system offline`,
+      fileEncrypted: (name: string, path: string) => `FILE ENCRYPTED: ${name} -- run 'decrypt ${path}' first.`,
+    },
+    clear: {
+      description: "Clear the terminal screen.",
+    },
+    power: {
+      description: "View or change power allocation.",
+      allocated: (used: number, total: number) => `POWER -- ${used}/${total} kW allocated`,
+      unknownSystem: (id: string) => `power: unknown system: ${id}`,
+      usageError: "usage: power <system> <on|off>",
+      offline: (name: string) => `${name}: OFFLINE`,
+      cannotEnable: (name: string, reason: string) => `${name}: CANNOT ENABLE -- ${reason}`,
+      insufficientPower: (name: string, need: number, have: number) =>
+        `${name}: INSUFFICIENT POWER -- requires ${need} kW, ${have} kW available.`,
+      freeUpHeadroom: "Disable another system to free up headroom.",
+      online: (name: string) => `${name}: ONLINE`,
+      statusLine: (name: string, on: boolean, kw: number) => `${name}: ${on ? "ON" : "OFF"} (${kw} kW)`,
+    },
+    whoami: {
+      description: "Show current user identity.",
+      identity: "REYES -- SYSTEMS & LOGISTICS OFFICER, AION-7",
+    },
+    scan: {
+      description: "Run a structural/sensor sweep of a sector.",
+      usageError: "usage: scan <sector>",
+      knownSectors: "Known sectors: system, crew, engineering, security, communications, laboratory, archive",
+      labHeader: "STRUCTURAL SCAN -- LABORATORY",
+      labResult: "Seal integrity within tolerance. Sector cleared for power restoration.",
+      genericHeader: (sector: string) => `STRUCTURAL SCAN -- ${sector.toUpperCase()}`,
+      genericResult: "No anomalies detected.",
+    },
+    camera: {
+      description: "View a camera feed.",
+      availableFeeds: "AVAILABLE FEEDS:",
+      unknownFeed: (id: string) => `camera: unknown feed: ${id}`,
+      accessDenied: (name: string) => `ACCESS DENIED: ${name} -- camera grid offline`,
+    },
+    decrypt: {
+      description: "Decrypt an encrypted file.",
+      usageError: "usage: decrypt <path>",
+      noSuchFile: (path: string) => `decrypt: no such file: ${path}`,
+      accessDenied: (name: string) => `ACCESS DENIED: ${name} -- insufficient clearance or system offline`,
+      notEncrypted: (name: string) => `${name}: not encrypted.`,
+      alreadyDecrypted: (name: string) => `${name}: already decrypted.`,
+      decrypted: (name: string) => `${name}: DECRYPTED.`,
+      runCatHint: "Run 'cat' to read it.",
+    },
+    route: {
+      description: "Reroute auxiliary power to repair a system.",
+      usageError: "usage: route <system>",
+      noFaultDiagnosed: "ROUTE FAILED -- no fault diagnosed.",
+      diagnoseFirst: "Run 'diagnostic communications' first.",
+      alreadyRepaired: "Communications array: already repaired.",
+      repaired: "AUXILIARY POWER REROUTED -- COMMUNICATIONS ARRAY REPAIRED.",
+      availableForAllocation: "System available for power allocation.",
+      noProcedure: (target: string) => `route: no repair procedure for '${target}'.`,
+    },
+    diagnostic: {
+      description: "Run a systems diagnostic.",
+      stationWideHeader: "DIAGNOSTIC -- STATION-WIDE",
+      stationWideResult: "No critical faults outside known incidents.",
+      commsHeader: "DIAGNOSTIC -- COMMUNICATIONS ARRAY",
+      commsFault: "Fault isolated: primary coupling sheared during the Cascade.",
+      commsHint: "Auxiliary reroute should restore power delivery. See 'route communications'.",
+      genericHeader: (target: string) => `DIAGNOSTIC -- ${target.toUpperCase()}`,
+      genericResult: "No faults detected.",
+    },
+    conclude: {
+      description: "Close out the session and compile the final record.",
+      alreadyConcluding: "Session already concluding. Awaiting resolution.",
+      concluding: "CONCLUDING SESSION...",
+      compiling: "Compiling final record.",
+    },
+    commandNotFound: (name: string) => `command not found: ${name}`,
+  },
+};
+
+export type Strings = typeof EN;

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useGameStore } from "@/store";
 import { useViewportSize } from "@/os/windows/useViewportSize";
 import { clampPosition, HEADER_MIN_VISIBLE_PX } from "@/os/windows/clampPosition";
+import { useStrings } from "@/i18n/useStrings";
 import "./Window.css";
 
 interface DragState {
@@ -20,6 +21,7 @@ interface WindowProps {
 }
 
 export default function Window({ id, title, defaultPosition, children }: WindowProps) {
+  const t = useStrings();
   const rawPosition = useGameStore((s) => s.apps.positions[id]) ?? defaultPosition;
   const focusedId = useGameStore((s) => s.apps.focusedId);
   const focusApp = useGameStore((s) => s.focusApp);
@@ -89,7 +91,7 @@ export default function Window({ id, title, defaultPosition, children }: WindowP
         onPointerUp={onPointerUp}
       >
         <span className="window__title">{title}</span>
-        <button className="window__close" onClick={() => closeApp(id)} aria-label={`Close ${title}`}>
+        <button className="window__close" onClick={() => closeApp(id)} aria-label={t.window.closeAriaLabel(title)}>
           x
         </button>
       </div>

@@ -5,14 +5,20 @@ import type { EventWorldState } from "@/core/events/types";
 
 const NODES: FileSystemNode[] = [
   { id: "dir-engineering", path: "/engineering", type: "dir", name: "engineering" },
-  { id: "power-log", path: "/engineering/power-log.txt", type: "file", name: "power-log.txt", body: ["a"] },
+  {
+    id: "power-log",
+    path: "/engineering/power-log.txt",
+    type: "file",
+    name: "power-log.txt",
+    body: { en: ["a"], "es-AR": ["a"] },
+  },
   { id: "dir-security", path: "/security", type: "dir", name: "security" },
   {
     id: "incident-report",
     path: "/security/incident-report.log",
     type: "file",
     name: "incident-report.log",
-    body: ["b"],
+    body: { en: ["b"], "es-AR": ["b"] },
     requires: [{ type: "power", system: "security", state: "on" }],
   },
 ];

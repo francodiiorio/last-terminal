@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { useGameStore } from "@/store";
 import { audioManager } from "@/audio/manager";
+import { useStrings } from "@/i18n/useStrings";
 import "./TerminalApp.css";
 
 export default function TerminalApp() {
+  const t = useStrings();
   const output = useGameStore((s) => s.terminal.output);
   const history = useGameStore((s) => s.terminal.history);
   const cwd = useGameStore((s) => s.filesystem.cwd);
@@ -85,7 +87,7 @@ export default function TerminalApp() {
           onKeyDown={handleKeyDown}
           spellCheck={false}
           autoComplete="off"
-          aria-label="Terminal command input"
+          aria-label={t.terminal.inputAriaLabel}
         />
       </div>
     </div>

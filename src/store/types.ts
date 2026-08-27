@@ -8,6 +8,7 @@ import type { TimeState } from "@/store/time";
 import type { SettingsState } from "@/store/settings";
 import type { StationState } from "@/store/station";
 import type { PowerSystemState } from "@/game/power/types";
+import type { Language } from "@/core/language";
 
 /** The serializable subset of state a save game captures. Mirrors docs/ARCHITECTURE.md's SaveGameV1. */
 export interface GameSnapshot {
@@ -17,7 +18,7 @@ export interface GameSnapshot {
   apps: { unlockedIds: string[] };
   terminal: { unlockedCommands: string[]; history: string[] };
   time: { minutesElapsed: number };
-  settings: { volume: number; muted: boolean; reducedMotion: boolean };
+  settings: { volume: number; muted: boolean; reducedMotion: boolean; language: Language };
 }
 
 export interface GameActions {
@@ -38,6 +39,7 @@ export interface GameActions {
   setVolume: (volume: number) => void;
   setMuted: (muted: boolean) => void;
   setReducedMotion: (value: boolean) => void;
+  setLanguage: (language: Language) => void;
   dismissNotification: (id: string) => void;
 
   newGame: () => void;

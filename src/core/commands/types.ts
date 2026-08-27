@@ -1,3 +1,5 @@
+import type { Language } from "@/core/language";
+
 export interface CommandContext {
   args: string[];
   raw: string;
@@ -13,7 +15,7 @@ export interface CommandGameStateView {
   cwd: string;
   unlockedCommands: string[];
   unlockedFileIds: string[];
-  whoami: string;
+  language: Language;
   minutesElapsed: number;
 }
 

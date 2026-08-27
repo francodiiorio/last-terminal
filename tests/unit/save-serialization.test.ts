@@ -14,7 +14,7 @@ const SNAPSHOT: GameSnapshot = {
   apps: { unlockedIds: ["terminal", "power"] },
   terminal: { unlockedCommands: [], history: ["status", "ls"] },
   time: { minutesElapsed: 24 },
-  settings: { volume: 0.5, muted: false, reducedMotion: true },
+  settings: { volume: 0.5, muted: false, reducedMotion: true, language: "en" },
 };
 
 describe("save serialization", () => {

@@ -3,29 +3,31 @@ import { canEnable, headroomKw, isLocked, totalConsumptionKw } from "@/game/powe
 import type { PowerSystemDef, PowerSystemState } from "@/game/power/types";
 import type { EventWorldState } from "@/core/events/types";
 
+const loc = (en: string) => ({ en, "es-AR": en });
+
 const SYSTEMS: PowerSystemDef[] = [
-  { id: "life-support", name: "Life Support", consumptionKw: 80, priority: 0, defaultOn: true, description: "" },
-  { id: "terminal", name: "Terminal", consumptionKw: 10, priority: 1, defaultOn: true, description: "" },
-  { id: "cameras", name: "Cameras", consumptionKw: 35, priority: 2, defaultOn: true, description: "" },
-  { id: "security", name: "Security", consumptionKw: 90, priority: 3, defaultOn: false, description: "" },
+  { id: "life-support", name: loc("Life Support"), consumptionKw: 80, priority: 0, defaultOn: true, description: loc("") },
+  { id: "terminal", name: loc("Terminal"), consumptionKw: 10, priority: 1, defaultOn: true, description: loc("") },
+  { id: "cameras", name: loc("Cameras"), consumptionKw: 35, priority: 2, defaultOn: true, description: loc("") },
+  { id: "security", name: loc("Security"), consumptionKw: 90, priority: 3, defaultOn: false, description: loc("") },
   {
     id: "navigation",
-    name: "Navigation",
+    name: loc("Navigation"),
     consumptionKw: 150,
     priority: 4,
     defaultOn: false,
-    lockedReason: "not required",
-    description: "",
+    lockedReason: loc("not required"),
+    description: loc(""),
   },
   {
     id: "communications",
-    name: "Communications",
+    name: loc("Communications"),
     consumptionKw: 120,
     priority: 5,
     defaultOn: false,
-    lockedReason: "array offline",
+    lockedReason: loc("array offline"),
     unlockRequires: [{ type: "flag", flag: "communicationsRepaired", equals: true }],
-    description: "",
+    description: loc(""),
   },
 ];
 const BUDGET = 180;

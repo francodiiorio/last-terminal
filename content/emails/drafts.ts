@@ -1,4 +1,5 @@
 import type { Condition } from "@/core/events/types";
+import type { Localized } from "@/core/language";
 
 /**
  * Outbound draft templates offered by the Communications app. Deliberately not free-text --
@@ -9,11 +10,11 @@ import type { Condition } from "@/core/events/types";
  */
 export interface DraftDef {
   id: string;
-  label: string;
+  label: Localized<string>;
   requires: Condition[];
   /** story flag set once this draft is sent */
   confirmFlag: string;
-  confirmation: string[];
+  confirmation: Localized<string[]>;
 }
 
 const REQUIRES_COMMS_ON: Condition[] = [{ type: "power", system: "communications", state: "on" }];
@@ -21,24 +22,41 @@ const REQUIRES_COMMS_ON: Condition[] = [{ type: "power", system: "communications
 export const OUTBOUND_DRAFTS: DraftDef[] = [
   {
     id: "routine-status-update",
-    label: "Send: Routine Status Update",
+    label: { en: "Send: Routine Status Update", "es-AR": "Enviar: Actualización de Estado de Rutina" },
     requires: REQUIRES_COMMS_ON,
     confirmFlag: "sentRoutineStatusUpdate",
-    confirmation: [
-      "TRANSMISSION QUEUED -- OUTBOUND",
-      "Routine status update queued for Concord HQ.",
-      "ETA 6-14h (light-lag).",
-    ],
+    confirmation: {
+      en: [
+        "TRANSMISSION QUEUED -- OUTBOUND",
+        "Routine status update queued for Concord HQ.",
+        "ETA 6-14h (light-lag).",
+      ],
+      "es-AR": [
+        "TRANSMISIÓN EN COLA -- SALIENTE",
+        "Actualización de estado de rutina en cola para el Cuartel General del Concord.",
+        "ETA 6-14h (retraso lumínico).",
+      ],
+    },
   },
   {
     id: "incident-report",
-    label: "Send: Incident Report (Cascade & Signal Findings)",
+    label: {
+      en: "Send: Incident Report (Cascade & Signal Findings)",
+      "es-AR": "Enviar: Informe de Incidente (Cascada y Hallazgos de Señal)",
+    },
     requires: REQUIRES_COMMS_ON,
     confirmFlag: "sentIncidentReport",
-    confirmation: [
-      "TRANSMISSION QUEUED -- OUTBOUND",
-      "Full incident report queued for Concord HQ.",
-      "ETA 6-14h (light-lag).",
-    ],
+    confirmation: {
+      en: [
+        "TRANSMISSION QUEUED -- OUTBOUND",
+        "Full incident report queued for Concord HQ.",
+        "ETA 6-14h (light-lag).",
+      ],
+      "es-AR": [
+        "TRANSMISIÓN EN COLA -- SALIENTE",
+        "Informe de incidente completo en cola para el Cuartel General del Concord.",
+        "ETA 6-14h (retraso lumínico).",
+      ],
+    },
   },
 ];

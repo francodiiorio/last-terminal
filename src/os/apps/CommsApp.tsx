@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { useGameStore } from "@/store";
 import { evaluateConditions } from "@/core/conditions";
+import { pick } from "@/core/language";
 import { MESSAGES } from "@content/emails/messages";
 import { OUTBOUND_DRAFTS } from "@content/emails/drafts";
 import { TIME_COSTS } from "@/core/time";
 import { audioManager } from "@/audio/manager";
+import { useStrings } from "@/i18n/useStrings";
 import "./CommsApp.css";
 
 export default function CommsApp() {
+  const t = useStrings();
+  const language = useGameStore((s) => s.settings.language);
   const flags = useGameStore((s) => s.story.flags);
   const power = useGameStore((s) => s.power.systems);
   const minutesElapsed = useGameStore((s) => s.time.minutesElapsed);
@@ -42,28 +46,28 @@ export default function CommsApp() {
     <div className="comms-app">
       <div className="comms-app__inbox">
         <div className="comms-app__list">
-          {visibleMessages.length === 0 && <p className="comms-app__empty">NO MESSAGES -- COMMUNICATIONS OFFLINE</p>}
+          {visibleMessages.length === 0 && <p className="comms-app__empty">{t.comms.noMessages}</p>}
           {visibleMessages.map((m) => (
             <button
               key={m.id}
               className={`comms-app__message-button${m.id === selectedId ? " comms-app__message-button--active" : ""}`}
               onClick={() => selectMessage(m.id)}
             >
-              <span className="comms-app__message-from">{m.from}</span>
+              <span className="comms-app__message-from">{pick(m.from, language)}</span>
               <span className="comms-app__message-meta">
-                {flags[`read:${m.id}`] === true ? "READ" : "NEW"} -- {m.timestamp}
+                {flags[`read:${m.id}`] === true ? t.comms.read : t.comms.new} -- {m.timestamp}
               </span>
             </button>
           ))}
         </div>
         <div className="comms-app__reader">
-          {!selected && <p className="comms-app__empty">Select a message.</p>}
+          {!selected && <p className="comms-app__empty">{t.comms.selectMessage}</p>}
           {selected && (
             <>
               <p>
-                <strong>{selected.subject}</strong>
+                <strong>{pick(selected.subject, language)}</strong>
               </p>
-              {selected.body.map((line, i) => (
+              {pick(selected.body, language).map((line, i) => (
                 <p key={i}>{line}</p>
               ))}
             </>
@@ -76,18 +80,18 @@ export default function CommsApp() {
           const available = evaluateConditions(draft.requires, world);
           return (
             <div className="comms-app__draft-row" key={draft.id}>
-              <span>{draft.label}</span>
+              <span>{pick(draft.label, language)}</span>
               <button
                 className="comms-app__draft-button"
                 onClick={() => sendDraft(draft.id)}
                 disabled={sent || !available}
               >
-                {sent ? "SENT" : available ? "SEND" : "OFFLINE"}
+                {sent ? t.comms.sent : available ? t.comms.send : t.comms.offline}
               </button>
             </div>
           );
         })}
-        {lastSentDraft && <p className="comms-app__confirmation">{lastSentDraft.confirmation.join(" ")}</p>}
+        {lastSentDraft && <p className="comms-app__confirmation">{pick(lastSentDraft.confirmation, language).join(" ")}</p>}
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import type { FileSystemNode } from "@/game/filesystem/types";
+import { LANGUAGES, type Localized } from "@/core/language";
 import { ENGINEERING_POWER_LOG } from "@content/logs/engineering-power-log";
 import { SYSTEM_STATUS_LOG } from "@content/logs/system-status-log";
 import { REYES_PERSONAL_LOG } from "@content/logs/reyes-personal-log";
@@ -7,12 +8,31 @@ import { DEEPWATCH_STATUS_LOG } from "@content/logs/deepwatch-status-log";
 import { CASSIUS_INTERNAL_NOTE } from "@content/logs/cassius-internal-note";
 import { TANTALUS_SURVEY } from "@content/logs/tantalus-survey";
 import { MESSAGES } from "@content/emails/messages";
-import { CREW } from "@content/characters/crew";
+import { CREW, type CrewMember } from "@content/characters/crew";
 
 function message(id: string) {
   const found = MESSAGES.find((m) => m.id === id);
   if (!found) throw new Error(`content/files/tree.ts: no MESSAGES entry with id "${id}"`);
   return found;
+}
+
+const PERSONNEL_FILE_HEADER: Localized<{ fileLabel: string; roleLabel: string }> = {
+  en: { fileLabel: "PERSONNEL FILE --", roleLabel: "Role:" },
+  "es-AR": { fileLabel: "LEGAJO DE PERSONAL --", roleLabel: "Rol:" },
+};
+
+function personnelBody(member: CrewMember): Localized<string[]> {
+  const body = {} as Localized<string[]>;
+  for (const lang of LANGUAGES) {
+    const header = PERSONNEL_FILE_HEADER[lang];
+    body[lang] = [
+      `${header.fileLabel} ${member.name.toUpperCase()}`,
+      `${header.roleLabel} ${member.role[lang]}`,
+      "",
+      ...member.note[lang],
+    ];
+  }
+  return body;
 }
 
 /**
@@ -25,7 +45,7 @@ const CREW_PERSONNEL_NODES: FileSystemNode[] = CREW.filter((member) => member.id
   path: `/crew/${member.id}.personnel`,
   type: "file",
   name: `${member.id}.personnel`,
-  body: [`PERSONNEL FILE -- ${member.name.toUpperCase()}`, `Role: ${member.role}`, "", ...member.note],
+  body: personnelBody(member),
 }));
 
 /**
