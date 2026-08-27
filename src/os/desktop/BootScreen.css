@@ -1,0 +1,67 @@
+.boot-screen {
+  height: 100%;
+  width: 100%;
+  background: var(--color-bg);
+  color: var(--color-accent);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-6);
+  font-size: 15px;
+}
+
+.boot-screen__lines {
+  max-width: 640px;
+}
+
+.boot-screen__line {
+  white-space: pre-wrap;
+  margin: 0 0 var(--space-1) 0;
+  color: var(--color-text);
+}
+
+.boot-screen__line--accent {
+  color: var(--color-accent);
+}
+
+.boot-screen__menu {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 320px;
+}
+
+.boot-screen__button {
+  background: transparent;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 13px;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+
+.boot-screen__button:hover,
+.boot-screen__button:focus-visible {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  outline: none;
+}
+
+.boot-screen__button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.boot-screen__error {
+  color: var(--color-critical);
+  margin-top: var(--space-2);
+  font-size: 12px;
+}
+
+.boot-screen__file-input {
+  display: none;
+}

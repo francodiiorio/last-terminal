@@ -1,0 +1,22 @@
+:root {
+  --color-bg: #05080a;
+  --color-bg-raised: #0a1012;
+  --color-panel: #0d1416;
+  --color-panel-header: #111a1c;
+  --color-border: #223032;
+  --color-border-strong: #35494c;
+  --color-text: #c7d6d2;
+  --color-text-dim: #7c8f8c;
+  --color-text-faint: #4c5c5a;
+  --color-accent: #49d3b4;
+  --color-accent-dim: #2a7c68;
+  --color-warning: #e0a95a;
+  --color-critical: #e0605a;
+  --font-mono: "SFMono-Regular", "IBM Plex Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+}

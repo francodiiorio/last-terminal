@@ -1,0 +1,21 @@
+export const REYES_PERSONAL_LOG = {
+  id: "reyes-personal-log",
+  title: "PERSONAL LOG — SYSTEMS OFFICER REYES",
+  body: [
+    "PERSONAL LOG -- SYSTEMS OFFICER REYES",
+    "Access: Owner only",
+    "",
+    "MD 213 2340 -- Anand-Kel asked me to review the dish power draw curve",
+    "again before shift change. Wouldn't say why. She's been like that for",
+    "weeks -- asking questions like she already knows the answer and is just",
+    "checking whether I'll get there too.",
+    "",
+    "Whatever's going on with the array, it's above my clearance. Not my",
+    "first time being the last to know something on this station. Doesn't",
+    "usually end well for anyone.",
+    "",
+    "Going off shift. Will pick this up in the morning.",
+    "",
+    "[LOG ENDS -- NEXT ENTRY: SYSTEM RECOVERY BOOT, SEE STATUS.LOG]",
+  ],
+};

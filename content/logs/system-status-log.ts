@@ -1,0 +1,20 @@
+export const SYSTEM_STATUS_LOG = {
+  id: "system-status-log",
+  title: "TOS SYSTEM STATUS — AUTOMATED RECORD",
+  body: [
+    "TOS SYSTEM STATUS -- AUTOMATED RECORD",
+    "Source: CASSIUS / Station Custodian Process",
+    "Access: Unrestricted",
+    "",
+    "MD 205 0600 -- All systems nominal.",
+    "MD 205 1800 -- All systems nominal.",
+    "MD 209 0600 -- All systems nominal. Minor sensor recalibration, sector C.",
+    "MD 211 0600 -- All systems nominal.",
+    "MD 213 0600 -- All systems nominal.",
+    "MD 214 0312 -- STATION-WIDE POWER FAILURE. Emergency protocols engaged.",
+    "MD 214 0500 -- Reserve power stabilized. Non-essential personnel in deep",
+    "watch. Recovery in progress.",
+    "",
+    "[END OF RECORD]",
+  ],
+};

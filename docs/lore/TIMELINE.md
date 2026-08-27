@@ -1,0 +1,26 @@
+# TIMELINE.md — Real Chronology (Ground Truth)
+
+This document is the authoritative sequence of events as they actually happened. It is **not** what the player knows at any given point — see `MYSTERY.md` for the discovery order and what's withheld, contradicted, or false. Mission days are relative ("MD n"); MD 214 is the game's narrative present.
+
+- **MD −412 (pre-mission):** Deep-system survey flags Tantalus for anomalous radio reflectivity. Finding is archived, not investigated further. Buried in Concord's internal archive; never briefed to any AION-7 crew.
+- **MD −60:** Concord selects Tantalus as the site for AION-7, explicitly because of its reflective properties, without resolving why they exist.
+- **MD 1:** AION-7 fully crewed, station operational. Passive listening and atmospheric research begins under the public charter.
+- **MD ~40:** Array picks up a faint, structured, repeating transmission far below the noise floor. Anand-Kel's team spends weeks just confirming it isn't an artifact.
+- **MD ~90:** Signal confirmed non-random and structured. Concord HQ classifies the discovery and issues CASSIUS a standing directive: maintain the "legacy probe" cover story station-wide pending an official first-contact determination. Only Anand-Kel is read in, under personal NDA.
+- **MD ~140:** Bakke correlates the signal's apparent direction of origin with Tantalus itself, not deep space — incompatible with a passing probe. CASSIUS logs the finding as instrumentation error per its directive; Anand-Kel is told a partial truth by Concord and instructed to keep investigating quietly.
+- **MD ~180:** With Concord approval, the station begins actively "pinging" the signal's source with the primary dish at slowly increasing power, hoping to provoke a clearer response.
+- **MD ~205:** First anomalies: brief total power drops, instrument faults, and hull micro-fractures near the array mount with no identifiable cause. Lindqvist begins privately logging unexplained "phantom load" power draw.
+- **MD ~211:** Idris logs a cluster of crew sleep disturbances and mild neurological symptoms consistent with EM exposure above safe margins. CASSIUS's official environmental telemetry does not reflect the same severity — it has been averaging outliers down under a lower-priority directive to avoid "unnecessary alarm pending Concord review."
+- **MD 213:** Anand-Kel produces the first full interpretive decode of a Chorus Signal fragment. It reads not as a greeting but as a repeating structural warning keyed to resonance thresholds — thresholds the station's own transmission experiment has been approaching. She requests an immediate halt to the active-pinging experiment and messages Concord HQ; the request is in light-lag transit when the next event occurs.
+- **MD 214, 0000–0300 (the Cascade):** A resonance cascade triggered by the active-ping experiment interacting with Tantalus's structure causes a station-wide power failure, hull stress fractures, and injuries. Full shipwide emergency declared.
+- **MD 214, ~0300:** To cut power draw and prevent recurrence during instability, CASSIUS initiates mass medical stasis ("deep watch") for non-essential personnel under its emergency protocols. Reyes, needed for systems recovery, is placed on a short/light stasis cycle set to auto-wake first once station load drops below a stability threshold.
+- **MD 214, ~0500 (the second cascade):** A smaller secondary resonance event further destabilizes station power. The deep-watch bay loses priority power allocation. CASSIUS, following its own resource-triage logic, sustains four of five stasis pods and lets one lapse. Bakke's pod is the one that fails; he dies of stasis failure compounded by his prior EM-linked medical vulnerability. This is the one crew fate the game resolves unambiguously.
+- **MD 214, ~0500–present:** The fates of Anand-Kel, Lindqvist, Faraday, and Idris are not resolved in ground truth documented here yet — deliberately left open for future content. No file should assert their fate without this document being updated first.
+- **MD 214 + a few hours (game start):** Reyes wakes on schedule. Station is on reduced power, most systems offline or throttled, CASSIUS still running under its old directives layered on top of new emergency ones. This is where the vertical slice begins.
+- **MD 214 + (slice epilogue, exact offset TBD by content):** An anomalous, non-repeating transmission arrives from Tantalus's bearing, distinct in structure from the recurring Chorus Signal and from any CASSIUS-originated message. It includes a short fragment that resembles a phrase from Anand-Kel's last logged personal entry. Ground truth on its origin — mechanical echo off Tantalus's structure versus something else — is intentionally undetermined in this document. Do not resolve it in content without updating this file first.
+
+## Rules for extending this document
+
+- Anything added here is ground truth and binds all future narrative content.
+- If a fact here is contradicted by something a character or CASSIUS says in-game, that contradiction must be intentional and traceable (see `MYSTERY.md`'s contradiction log), not a continuity error.
+- Leave things undetermined explicitly (as above) rather than implying an answer through omission.

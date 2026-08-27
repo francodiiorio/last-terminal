@@ -1,0 +1,40 @@
+.taskbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-panel-header);
+  border-top: 1px solid var(--color-border);
+  font-size: 12px;
+  color: var(--color-text-dim);
+  letter-spacing: 0.04em;
+}
+
+.taskbar__brand {
+  color: var(--color-accent);
+}
+
+.taskbar__meters {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.taskbar__meter--warning {
+  color: var(--color-warning);
+}
+
+.taskbar__button {
+  background: transparent;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-dim);
+  padding: 2px var(--space-2);
+  font-size: 11px;
+}
+
+.taskbar__button:hover,
+.taskbar__button:focus-visible {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  outline: none;
+}
