@@ -47,6 +47,10 @@ A second playthrough (GUI-driven this time: Camera/Comms app reactivity to power
 
 Confirmed *not* bugs: Camera and Comms apps correctly go to their "offline" empty state live if their power system is switched off while the app is already open, with no stale content left showing; creating multiple named manual saves works correctly once each save's own confirmation is awaited (an artificial rapid-double-click race turned out to be untriggerable in practice, since `window.prompt` is a blocking modal -- a real second click can't land until the first prompt is dismissed); "Restart Session" and both "New Session" entry points intentionally skip the boot animation and go straight to the desktop, and correctly leave zero residual state (station time, power, flags) between playthroughs.
 
+A user report ("I open a window and pressing the x doesn't close it") caught a real bug that no amount of automated `.click()`-based testing had surfaced, because Playwright's default click moves with zero jitter:
+
+- **The window header's pointerdown handler captured the pointer unconditionally**, including presses that started on the close button (`src/os/windows/Window.tsx`). A real click's near-inevitable sub-pixel movement between press and release then registered as a micro-drag; with the pointer captured by the header, the browser resolved the resulting click's target to the header instead of the button underneath, so the button's `onClick` (and therefore `closeApp`) never fired. Fixed by skipping capture/drag-start entirely when the press originates on `.window__close`. Verified by reproducing the exact failure first (reverting the fix against a jitter-simulating test showed the window staying open, confirming the root cause) before confirming the fix resolves it -- `tests/e2e/window-interaction.spec.ts`, which also checks dragging by the title bar still works.
+
 ## Explicitly out of scope until named otherwise
 
 - Any 3D/avatar movement.

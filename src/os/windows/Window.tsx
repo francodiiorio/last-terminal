@@ -46,6 +46,13 @@ export default function Window({ id, title, defaultPosition, children }: WindowP
 
   function onPointerDown(e: PointerEvent<HTMLDivElement>) {
     focusApp(id);
+    // Don't start a drag (or capture the pointer) for presses on interactive controls in the
+    // header, like the close button -- otherwise a real click's inevitable sub-pixel jitter
+    // between pointerdown and pointerup registers as a micro-drag, the header (not the button)
+    // ends up as the pointer-captured target, and the button's own click handler never fires.
+    // Playwright's synthetic clicks move with zero jitter, which is why automated tests never
+    // caught this: only real mouse/trackpad input triggers it.
+    if ((e.target as HTMLElement).closest(".window__close")) return;
     e.currentTarget.setPointerCapture(e.pointerId);
     dragRef.current = { startX: e.clientX, startY: e.clientY, origX: position.x, origY: position.y };
   }
