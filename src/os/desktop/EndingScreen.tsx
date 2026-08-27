@@ -5,6 +5,27 @@ import { ENDINGS } from "@content/endings/endings";
 import { useStrings } from "@/i18n/useStrings";
 import "./EndingScreen.css";
 
+/**
+ * Ending body arrays wrap each paragraph across multiple lines for source readability (~78
+ * columns), with a blank "" entry marking a real paragraph break -- same convention as the log
+ * files in content/logs/. Group consecutive non-blank lines back into one paragraph instead of
+ * giving every source line its own <p>, which was breaking sentences mid-thought.
+ */
+export function paragraphsFrom(lines: string[]): string[] {
+  const paragraphs: string[] = [];
+  let current: string[] = [];
+  for (const line of lines) {
+    if (line === "") {
+      if (current.length > 0) paragraphs.push(current.join(" "));
+      current = [];
+    } else {
+      current.push(line);
+    }
+  }
+  if (current.length > 0) paragraphs.push(current.join(" "));
+  return paragraphs;
+}
+
 export default function EndingScreen() {
   const t = useStrings();
   const language = useGameStore((s) => s.settings.language);
@@ -17,7 +38,7 @@ export default function EndingScreen() {
   if (!ending) return null;
 
   const title = pick(ending.title, language);
-  const body = pick(ending.body, language);
+  const body = paragraphsFrom(pick(ending.body, language));
 
   function handleRestart() {
     newGame();
