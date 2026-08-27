@@ -16,8 +16,9 @@ test("progress persists via autosave and continue", async ({ page }) => {
   await page.waitForTimeout(2000);
   await page.reload();
 
-  await expect(page.getByRole("button", { name: "Continue" })).toBeEnabled();
-  await page.getByRole("button", { name: "Continue" }).click();
+  const continueButton = page.locator(".boot-screen__button--save", { hasText: "Autosave" });
+  await expect(continueButton).toBeEnabled();
+  await continueButton.click();
 
   // continuing should drop us straight onto the desktop with prior power state restored
   await page.getByRole("button", { name: "TERMINAL", exact: true }).click();
@@ -63,4 +64,23 @@ test("export produces a save file that can be imported into a fresh session", as
   await page.getByLabel("Terminal command input").fill("power");
   await page.getByLabel("Terminal command input").press("Enter");
   await expect(page.getByText(/security\s+ON/)).toBeVisible();
+});
+
+test("Save As creates a manual slot visible in the boot screen save browser, and it can be deleted", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "New Session" }).click();
+
+  page.once("dialog", (dialog) => dialog.accept("My Manual Save"));
+  await page.getByRole("button", { name: "Save As..." }).click();
+  await expect(page.getByText('Saved as "My Manual Save".')).toBeVisible();
+
+  await page.reload();
+  const savedRow = page.locator(".boot-screen__button--save", { hasText: "My Manual Save" });
+  await expect(savedRow).toBeVisible();
+
+  page.once("dialog", (dialog) => dialog.accept());
+  await page.getByRole("button", { name: "Delete save My Manual Save" }).click();
+  await expect(savedRow).not.toBeVisible();
 });

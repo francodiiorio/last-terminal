@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { useGameStore } from "@/store";
 import { formatStationTime } from "@/core/time";
 import { headroomKw } from "@/game/power/budget";
 import { POWER_SYSTEMS, STATION_POWER_BUDGET_KW } from "@content/power/systems";
-import { serializeSave } from "@/persistence/save";
+import { newManualSlot, saveGame, serializeSave } from "@/persistence/save";
 import "./Taskbar.css";
 
 export default function Taskbar() {
@@ -11,6 +12,7 @@ export default function Taskbar() {
   const exportSnapshot = useGameStore((s) => s.exportSnapshot);
   const newGame = useGameStore((s) => s.newGame);
   const bootComplete = useGameStore((s) => s.bootComplete);
+  const [savedMessage, setSavedMessage] = useState<string | null>(null);
 
   const headroom = headroomKw(STATION_POWER_BUDGET_KW, POWER_SYSTEMS, powerSystems);
   const lowPower = headroom < 20;
@@ -26,6 +28,14 @@ export default function Taskbar() {
     URL.revokeObjectURL(url);
   }
 
+  async function handleSaveAs() {
+    const label = window.prompt("Save slot name:", `Session ${new Date().toLocaleString()}`);
+    if (!label) return;
+    await saveGame(newManualSlot(), exportSnapshot(), label);
+    setSavedMessage(`Saved as "${label}".`);
+    setTimeout(() => setSavedMessage(null), 4000);
+  }
+
   function handleReset() {
     if (!window.confirm("Start a new session? Current progress will be overwritten.")) return;
     newGame();
@@ -36,8 +46,12 @@ export default function Taskbar() {
     <div className="taskbar">
       <span className="taskbar__brand">AION-7 / TOS</span>
       <div className="taskbar__meters">
+        {savedMessage && <span className="taskbar__saved-message">{savedMessage}</span>}
         <span className={lowPower ? "taskbar__meter--warning" : undefined}>PWR {headroom} kW free</span>
         <span>{formatStationTime(minutesElapsed)}</span>
+        <button className="taskbar__button" onClick={handleSaveAs}>
+          Save As...
+        </button>
         <button className="taskbar__button" onClick={handleExport}>
           Export Save
         </button>

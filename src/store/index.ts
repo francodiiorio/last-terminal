@@ -9,6 +9,7 @@ import { INITIAL_TIME_STATE } from "@/store/time";
 import { INITIAL_SETTINGS_STATE } from "@/store/settings";
 import { INITIAL_STATION_STATE, type NotificationItem } from "@/store/station";
 import { runEngineTick } from "@/game/engine";
+import { audioManager } from "@/audio/manager";
 import { parseCommandLine } from "@/core/commands/parser";
 import type { CommandContext, CommandDispatchAction, CommandGameStateView } from "@/core/commands/types";
 import { createCommandRegistry } from "@/game/commands/registry";
@@ -209,7 +210,14 @@ export const useGameStore = create<GameState>()((set, get) => {
     moveApp: (id, position) =>
       set((s) => ({ apps: { ...s.apps, positions: { ...s.apps.positions, [id]: position } } })),
 
-    setVolume: (volume) => set((s) => ({ settings: { ...s.settings, volume } })),
+    setVolume: (volume) => {
+      set((s) => ({ settings: { ...s.settings, volume } }));
+      audioManager.setMasterVolume(volume);
+    },
+    setMuted: (muted) => {
+      set((s) => ({ settings: { ...s.settings, muted } }));
+      audioManager.setMuted(muted);
+    },
     setReducedMotion: (value) => set((s) => ({ settings: { ...s.settings, reducedMotion: value } })),
     dismissNotification: (id) =>
       set((s) => ({ station: { ...s.station, notifications: s.station.notifications.filter((n) => n.id !== id) } })),
@@ -235,7 +243,7 @@ export const useGameStore = create<GameState>()((set, get) => {
         apps: { unlockedIds: s.apps.unlockedIds },
         terminal: { unlockedCommands: s.terminal.unlockedCommands, history: s.terminal.history },
         time: { minutesElapsed: s.time.minutesElapsed },
-        settings: { volume: s.settings.volume, reducedMotion: s.settings.reducedMotion },
+        settings: { volume: s.settings.volume, muted: s.settings.muted, reducedMotion: s.settings.reducedMotion },
       };
     },
 
@@ -251,9 +259,11 @@ export const useGameStore = create<GameState>()((set, get) => {
         apps: { ...s.apps, unlockedIds: snapshot.apps.unlockedIds },
         terminal: { ...s.terminal, unlockedCommands: snapshot.terminal.unlockedCommands, history: snapshot.terminal.history, output: [] },
         time: { minutesElapsed: snapshot.time.minutesElapsed },
-        settings: { volume: snapshot.settings.volume, reducedMotion: snapshot.settings.reducedMotion },
+        settings: { volume: snapshot.settings.volume, muted: snapshot.settings.muted, reducedMotion: snapshot.settings.reducedMotion },
         station: { scene: "desktop", notifications: [] },
       }));
+      audioManager.setMasterVolume(snapshot.settings.volume);
+      audioManager.setMuted(snapshot.settings.muted);
     },
   };
 });

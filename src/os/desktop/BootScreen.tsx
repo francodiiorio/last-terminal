@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useGameStore } from "@/store";
-import { hasSave, loadGame, AUTOSAVE_SLOT } from "@/persistence/save";
+import { AUTOSAVE_SLOT, deleteSave, listSaves, loadGame } from "@/persistence/save";
 import { deserializeSave } from "@/persistence/save";
+import type { SaveRecord } from "@/persistence/db";
+import { formatStationTime } from "@/core/time";
 import { audioManager } from "@/audio/manager";
 import "./BootScreen.css";
 
@@ -15,6 +17,11 @@ const BOOT_LINES = [
   "AWAITING INPUT",
 ];
 
+function saveLabel(record: SaveRecord): string {
+  if (record.label) return record.label;
+  return record.slot === AUTOSAVE_SLOT ? "Autosave" : record.slot;
+}
+
 export default function BootScreen() {
   const newGame = useGameStore((s) => s.newGame);
   const bootComplete = useGameStore((s) => s.bootComplete);
@@ -22,25 +29,36 @@ export default function BootScreen() {
   const reducedMotion = useGameStore((s) => s.settings.reducedMotion);
 
   const [phase, setPhase] = useState<"booting" | "menu">("booting");
-  const [canContinue, setCanContinue] = useState(false);
+  const [saves, setSaves] = useState<SaveRecord[]>([]);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  function refreshSaves() {
+    void listSaves().then(setSaves);
+  }
+
   useEffect(() => {
     audioManager.play("systemBoot");
-    void hasSave(AUTOSAVE_SLOT).then(setCanContinue);
+    refreshSaves();
     const delay = reducedMotion ? 50 : 1600;
     const timer = setTimeout(() => setPhase("menu"), delay);
     return () => clearTimeout(timer);
   }, [reducedMotion]);
 
-  async function handleContinue() {
-    const snapshot = await loadGame(AUTOSAVE_SLOT);
+  async function handleContinue(slot: string) {
+    const snapshot = await loadGame(slot);
     if (!snapshot) {
-      setError("NO SAVED SESSION FOUND.");
+      setError("SAVE SLOT NOT FOUND.");
+      refreshSaves();
       return;
     }
     loadSnapshot(snapshot);
+  }
+
+  async function handleDelete(slot: string) {
+    if (!window.confirm("Delete this saved session? This can't be undone.")) return;
+    await deleteSave(slot);
+    refreshSaves();
   }
 
   function handleNewGame() {
@@ -72,7 +90,7 @@ export default function BootScreen() {
           <motion.p
             key={line}
             className={`boot-screen__line${i === 0 ? " boot-screen__line--accent" : ""}`}
-            initial={{ opacity: 0 }}
+            initial={reducedMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: reducedMotion ? 0 : i * 0.22, duration: 0.2 }}
           >
@@ -84,13 +102,31 @@ export default function BootScreen() {
       {phase === "menu" && (
         <motion.div
           className="boot-screen__menu"
-          initial={{ opacity: 0 }}
+          initial={reducedMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: reducedMotion ? 0.05 : 0.3 }}
         >
-          <button className="boot-screen__button" onClick={handleContinue} disabled={!canContinue}>
-            Continue
-          </button>
+          {saves.length > 0 && (
+            <div className="boot-screen__saves">
+              {saves.map((record) => (
+                <div className="boot-screen__save-row" key={record.slot}>
+                  <button className="boot-screen__button boot-screen__button--save" onClick={() => handleContinue(record.slot)}>
+                    <span className="boot-screen__save-label">{saveLabel(record)}</span>
+                    <span className="boot-screen__save-meta">
+                      {formatStationTime(record.data.time.minutesElapsed)} station time -- {new Date(record.updatedAt).toLocaleString()}
+                    </span>
+                  </button>
+                  <button
+                    className="boot-screen__delete"
+                    onClick={() => handleDelete(record.slot)}
+                    aria-label={`Delete save ${saveLabel(record)}`}
+                  >
+                    x
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
           <button className="boot-screen__button" onClick={handleNewGame}>
             New Session
           </button>

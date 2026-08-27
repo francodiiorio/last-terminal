@@ -1,0 +1,54 @@
+.settings-app {
+  width: 320px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  font-size: 12px;
+}
+
+.settings-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.settings-row__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-row__label {
+  color: var(--color-text);
+  letter-spacing: 0.03em;
+}
+
+.settings-row__meta {
+  color: var(--color-text-faint);
+  font-size: 11px;
+}
+
+.settings-row__slider {
+  width: 100%;
+  accent-color: var(--color-accent);
+}
+
+.settings-toggle {
+  background: transparent;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-dim);
+  padding: 3px var(--space-2);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  align-self: flex-start;
+}
+
+.settings-toggle--on {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.settings-toggle:hover {
+  border-color: var(--color-accent);
+}

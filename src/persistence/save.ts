@@ -1,11 +1,16 @@
-import { db } from "@/persistence/db";
+import { db, type SaveRecord } from "@/persistence/db";
 import { CURRENT_SCHEMA_VERSION, migrateToLatest } from "@/persistence/migrations";
 import type { GameSnapshot } from "@/store/types";
 
 export const AUTOSAVE_SLOT = "autosave";
 
-export async function saveGame(slot: string, data: GameSnapshot): Promise<void> {
-  await db.saves.put({ slot, schemaVersion: CURRENT_SCHEMA_VERSION, updatedAt: Date.now(), data });
+/** Slot key for a new manual save. Distinct from AUTOSAVE_SLOT so "Save As" never overwrites it. */
+export function newManualSlot(): string {
+  return `manual-${Date.now()}`;
+}
+
+export async function saveGame(slot: string, data: GameSnapshot, label?: string): Promise<void> {
+  await db.saves.put({ slot, schemaVersion: CURRENT_SCHEMA_VERSION, updatedAt: Date.now(), data, label });
 }
 
 export async function loadGame(slot: string): Promise<GameSnapshot | undefined> {
@@ -20,6 +25,12 @@ export async function hasSave(slot: string = AUTOSAVE_SLOT): Promise<boolean> {
 
 export async function deleteSave(slot: string): Promise<void> {
   await db.saves.delete(slot);
+}
+
+/** All saved sessions (autosave + manual slots), most recently updated first. */
+export async function listSaves(): Promise<SaveRecord[]> {
+  const all = await db.saves.toArray();
+  return all.sort((a, b) => b.updatedAt - a.updatedAt);
 }
 
 interface SaveFileEnvelope {

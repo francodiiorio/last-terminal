@@ -61,6 +61,8 @@ export default function PowerApp() {
               className={`power-row__toggle${isOn ? " power-row__toggle--on" : ""}${locked ? " power-row__toggle--locked" : ""}`}
               onClick={() => handleToggle(system.id)}
               disabled={locked}
+              aria-pressed={isOn}
+              aria-label={`${system.name} power ${isOn ? "on" : "off"}`}
             >
               {locked ? "LOCKED" : isOn ? "ON" : "OFF"}
             </button>

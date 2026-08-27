@@ -11,7 +11,7 @@ export interface AppsState {
 }
 
 /** Apps available from the start of the vertical slice. */
-export const DEFAULT_UNLOCKED_APPS = ["terminal", "power", "cameras", "comms"];
+export const DEFAULT_UNLOCKED_APPS = ["terminal", "power", "cameras", "comms", "settings"];
 
 export const INITIAL_APPS_STATE: AppsState = {
   unlockedIds: [...DEFAULT_UNLOCKED_APPS],

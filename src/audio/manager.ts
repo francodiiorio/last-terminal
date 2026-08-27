@@ -1,4 +1,5 @@
 import { Howl } from "howler";
+import { getGeneratedSoundLibrary, type ResolvedSoundDef } from "@/audio/generatedSounds";
 
 export type SoundId =
   | "ambient"
@@ -9,33 +10,35 @@ export type SoundId =
   | "powerToggle"
   | "transmission";
 
-interface SoundDef {
-  src: string[];
-  loop?: boolean;
-  volume?: number;
-}
-
-/**
- * Intentionally empty until real assets ship (see docs/ROADMAP.md Milestone 4). No entry here
- * means `play()` is a safe no-op -- the manager never references a file that doesn't exist, so
- * it never 404s or throws. Populate an entry (pointing at a file under public/audio/) to enable
- * that sound; no other code needs to change.
- */
-const SOUND_LIBRARY: Partial<Record<SoundId, SoundDef>> = {};
-
 class AudioManager {
   private howls = new Map<SoundId, Howl>();
   private muted = false;
   private masterVolume = 0.6;
+  private library: Partial<Record<SoundId, ResolvedSoundDef>> | null = null;
+
+  /**
+   * Builds the sound library on first use only, and never throws even if Blob/URL synthesis
+   * fails for some reason (unsupported environment, etc.) -- audio degrades to a safe no-op
+   * exactly like the pre-Milestone-4 empty library did, it just tries first.
+   */
+  private getLibrary(): Partial<Record<SoundId, ResolvedSoundDef>> {
+    if (this.library) return this.library;
+    try {
+      this.library = getGeneratedSoundLibrary();
+    } catch {
+      this.library = {};
+    }
+    return this.library;
+  }
 
   play(id: SoundId): void {
     if (this.muted) return;
-    const def = SOUND_LIBRARY[id];
+    const def = this.getLibrary()[id];
     if (!def) return;
 
     let howl = this.howls.get(id);
     if (!howl) {
-      howl = new Howl({ src: def.src, loop: def.loop ?? false, volume: (def.volume ?? 1) * this.masterVolume });
+      howl = new Howl({ src: def.src, loop: def.loop, volume: def.volume * this.masterVolume });
       this.howls.set(id, howl);
     }
     howl.play();
@@ -52,7 +55,10 @@ class AudioManager {
 
   setMasterVolume(volume: number): void {
     this.masterVolume = volume;
-    this.howls.forEach((h) => h.volume(volume));
+    this.howls.forEach((h, id) => {
+      const def = this.library?.[id];
+      h.volume(volume * (def?.volume ?? 1));
+    });
   }
 }
 

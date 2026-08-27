@@ -17,7 +17,7 @@ export interface GameSnapshot {
   apps: { unlockedIds: string[] };
   terminal: { unlockedCommands: string[]; history: string[] };
   time: { minutesElapsed: number };
-  settings: { volume: number; reducedMotion: boolean };
+  settings: { volume: number; muted: boolean; reducedMotion: boolean };
 }
 
 export interface GameActions {
@@ -36,6 +36,7 @@ export interface GameActions {
   moveApp: (id: string, position: WindowPosition) => void;
 
   setVolume: (volume: number) => void;
+  setMuted: (muted: boolean) => void;
   setReducedMotion: (value: boolean) => void;
   dismissNotification: (id: string) => void;
 

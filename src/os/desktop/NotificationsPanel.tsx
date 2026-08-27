@@ -7,6 +7,7 @@ import "./NotificationsPanel.css";
 export default function NotificationsPanel() {
   const notifications = useGameStore((s) => s.station.notifications);
   const dismissNotification = useGameStore((s) => s.dismissNotification);
+  const reducedMotion = useGameStore((s) => s.settings.reducedMotion);
   const seenIds = useRef(new Set<string>());
 
   useEffect(() => {
@@ -18,16 +19,16 @@ export default function NotificationsPanel() {
   }, [notifications]);
 
   return (
-    <div className="notifications">
+    <div className="notifications" role="status" aria-live="polite" aria-atomic="false">
       <AnimatePresence>
         {notifications.map((n) => (
           <motion.div
             key={n.id}
             className={`notification${n.level !== "info" ? ` notification--${n.level}` : ""}`}
-            initial={{ opacity: 0, x: 24 }}
+            initial={reducedMotion ? false : { opacity: 0, x: 24 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 24 }}
-            transition={{ duration: 0.18 }}
+            exit={reducedMotion ? { opacity: 0 } : { opacity: 0, x: 24 }}
+            transition={{ duration: reducedMotion ? 0.05 : 0.18 }}
           >
             <span className="notification__message">{n.message}</span>
             <button

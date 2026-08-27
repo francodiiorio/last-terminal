@@ -23,12 +23,12 @@ The smallest playable end-to-end experience: boot → desktop → terminal → f
 - Built the four endings from `docs/lore/ENDINGS.md` (Silence, Disclosure, Custodian, Resonance — `content/endings/endings.ts`) with legible, decision-driven trigger conditions: a provably mutually-exclusive/exhaustive partition over "sent the incident report," "read CASSIUS's internal note," and "left Life Support off for 40+ minutes" (`content/events/milestone3-events.ts`). Reaching the story's climax doesn't end the game by itself — it unlocks an explicit `conclude` command, so Milestone 1/2 content stays reachable until the player chooses to close the session.
 - Deliberately continued to leave open the fates of Anand-Kel, Lindqvist, Faraday, and Idris, and the final transmission's origin — see the Milestone 3 notes added to `docs/lore/TIMELINE.md` and `docs/lore/MYSTERY.md`. None of the four endings assert an answer to either.
 
-## Milestone 4 — Polish
+## Milestone 4 — Polish (done)
 
-- Full audio pass (replace placeholder-safe silent stubs with real assets).
-- Accessibility pass (reduced motion, screen-reader-friendly terminal output, remappable/keyboard-only navigation).
-- Save slot management beyond a single autosave (manual slots, save browser).
-- Visual polish pass on CRT/scanline effects, informed by playtesting for legibility.
+- **Audio**: replaced the silent placeholder library with a real one — every cue is synthesized procedurally at runtime (`src/audio/synth.ts`: oscillators + noise, WAV-encoded, played via Howler from Blob URLs) rather than a downloaded asset, since Fase 14's "no external/copyrighted material" constraint rules out sourcing files and no asset-generation tool was available. `src/audio/soundDefs.ts` holds the seven cue definitions; swapping in produced audio later means replacing that file's contents, nothing else. Added a Settings app (volume slider, mute, reduced motion) since those store actions previously had no UI.
+- **Accessibility**: notifications are now an `aria-live="polite"` region (previously silent to screen readers); Power toggle buttons carry `aria-pressed`/`aria-label`; `EndingScreen` and `NotificationsPanel` respect `settings.reducedMotion` (previously only `BootScreen` and `Window` did). Deliberately not done: remappable keybindings — out of scope for the value it'd add versus the UI it requires; everything in the game is already keyboard-operable via real `<button>`/`<input>` elements, just not rebindable.
+- **Save slots**: `persistence/save.ts` gained `listSaves`/`newManualSlot`/a `label` field on `SaveRecord`. The boot screen now lists every saved session (autosave and manual) with station time and a delete action instead of a single "Continue" button; the in-game Taskbar gained "Save As..." to create a new named manual slot alongside the existing continuous autosave.
+- **Visual polish**: reviewed via screenshot across boot, desktop, Settings, and the save browser — legibility held up and the existing CRT overlay was already restrained, so no changes were made rather than adjusting it for its own sake.
 
 ## Explicitly out of scope until named otherwise
 
