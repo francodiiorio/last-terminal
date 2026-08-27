@@ -38,7 +38,9 @@ class AudioManager {
 
     let howl = this.howls.get(id);
     if (!howl) {
-      howl = new Howl({ src: def.src, loop: def.loop, volume: def.volume * this.masterVolume });
+      // `format` is required here: generated sources are Blob URLs with no file extension, so
+      // Howler can't infer the codec from the URL the way it can for a real asset path.
+      howl = new Howl({ src: def.src, format: ["wav"], loop: def.loop, volume: def.volume * this.masterVolume });
       this.howls.set(id, howl);
     }
     howl.play();

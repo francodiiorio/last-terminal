@@ -30,6 +30,17 @@ The smallest playable end-to-end experience: boot → desktop → terminal → f
 - **Save slots**: `persistence/save.ts` gained `listSaves`/`newManualSlot`/a `label` field on `SaveRecord`. The boot screen now lists every saved session (autosave and manual) with station time and a delete action instead of a single "Continue" button; the in-game Taskbar gained "Save As..." to create a new named manual slot alongside the existing continuous autosave.
 - **Visual polish**: reviewed via screenshot across boot, desktop, Settings, and the save browser — legibility held up and the existing CRT overlay was already restrained, so no changes were made rather than adjusting it for its own sake.
 
+## Post-Milestone-4 playtest fixes
+
+An exploratory playthrough (edge-case commands, rapid power toggling, window drag/resize stress, a narrow viewport, keyboard-only interaction with the ending overlay) surfaced four real bugs, all fixed:
+
+- **Howler format warnings on every generated sound.** Blob URLs have no file extension for Howler to infer a codec from; fixed by passing `format: ["wav"]` explicitly (`src/audio/manager.ts`).
+- **Column misalignment in `power` and `camera` terminal output.** `padEnd(14)` produced zero padding (and so no visual gap) for ids at or past that length -- "communications" (14 chars) and "engineering-bay" (15 chars). Widened to `padEnd(16)`/`padEnd(17)`; regression-tested in `tests/unit/command-formatting.test.ts` by asserting every row's status column starts at the same index rather than pinning an exact width, so it can't silently regress the same way again.
+- **Windows could render off-screen on narrow viewports**, unreachable even to close. `src/os/windows/clampPosition.ts` now clamps a window's position using its *actual measured rendered width* (`Window.tsx` measures via ref + `useLayoutEffect`, re-measuring when the viewport changes), not a fixed guess -- the first version of this fix used a flat 160px margin and still left wider windows' close buttons off-screen, which is what motivated measuring instead of guessing.
+- **The Terminal power system had no consequence.** Every other power system gates something; toggling Terminal off did nothing. `store/index.ts`'s `runCommand` now refuses commands with an in-fiction message while Terminal power is off (the Power app GUI, which doesn't depend on it, remains a way back in).
+
+Confirmed *not* bugs during the same pass: the ending overlay can't be bypassed by keyboard (Tab from "Restart Session" doesn't reach anything underneath, and typing while unfocused does nothing); no power-budget sequence produces a true softlock, since every allocation is reversible.
+
 ## Explicitly out of scope until named otherwise
 
 - Any 3D/avatar movement.

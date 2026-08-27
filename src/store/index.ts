@@ -146,6 +146,16 @@ export const useGameStore = create<GameState>()((set, get) => {
         },
       }));
 
+      if (get().power.systems.terminal === "off") {
+        set((s) => ({
+          terminal: {
+            ...s.terminal,
+            output: [...s.terminal.output, makeOutputLine("TOS TERMINAL OFFLINE -- re-enable Terminal power to resume.", "error")],
+          },
+        }));
+        return;
+      }
+
       const parsed = parseCommandLine(input);
       if (!parsed) return;
 

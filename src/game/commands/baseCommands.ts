@@ -145,7 +145,7 @@ const powerCommand: CommandDefinition = {
       const lines = POWER_SYSTEMS.map((sys) => {
         const on = state.power[sys.id] === "on";
         const flag = isLocked(sys, world) ? "LOCKED" : on ? "ON " : "OFF";
-        return `  ${sys.id.padEnd(14)} ${flag}  ${String(sys.consumptionKw).padStart(3)} kW`;
+        return `  ${sys.id.padEnd(16)} ${flag}  ${String(sys.consumptionKw).padStart(3)} kW`;
       });
       return {
         output: [
@@ -230,7 +230,7 @@ const cameraCommand: CommandDefinition = {
   run: (ctx) => {
     const feedId = ctx.args[0]?.toLowerCase();
     if (!feedId) {
-      return { output: ["AVAILABLE FEEDS:", ...CAMERA_FEEDS.map((f) => `  ${f.id.padEnd(14)} ${f.name}`)] };
+      return { output: ["AVAILABLE FEEDS:", ...CAMERA_FEEDS.map((f) => `  ${f.id.padEnd(17)} ${f.name}`)] };
     }
     const feed = CAMERA_FEEDS.find((f) => f.id === feedId);
     if (!feed) return { output: [`camera: unknown feed: ${feedId}`] };
