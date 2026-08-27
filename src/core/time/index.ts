@@ -6,6 +6,8 @@
 export const TIME_COSTS = {
   openCamera: 1,
   decryptFile: 4,
+  scanSector: 3,
+  reroutePower: 3,
   runDiagnostic: 6,
   restartSystem: 12,
 } as const;

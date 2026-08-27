@@ -46,6 +46,9 @@ export const useGameStore = create<GameState>()((set, get) => {
       case "markFileRead":
         get().markFileRead(action.fileId);
         break;
+      case "setFlag":
+        get().setFlag(action.flag, action.value);
+        break;
     }
   }
 

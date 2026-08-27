@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import TerminalApp from "@/os/terminal/TerminalApp";
 import PowerApp from "@/os/apps/PowerApp";
+import CameraApp from "@/os/apps/CameraApp";
 
 export interface AppDef {
   id: string;
@@ -24,5 +25,12 @@ export const APP_REGISTRY: Record<string, AppDef> = {
     icon: "[kW]",
     defaultPosition: { x: 660, y: 110 },
     render: () => <PowerApp />,
+  },
+  cameras: {
+    id: "cameras",
+    title: "CAMERAS",
+    icon: "[CAM]",
+    defaultPosition: { x: 660, y: 420 },
+    render: () => <CameraApp />,
   },
 };

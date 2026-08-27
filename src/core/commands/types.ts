@@ -21,7 +21,8 @@ export type CommandDispatchAction =
   | { type: "setCwd"; path: string }
   | { type: "setPower"; system: string; state: "on" | "off" }
   | { type: "advanceTime"; minutes: number }
-  | { type: "markFileRead"; fileId: string };
+  | { type: "markFileRead"; fileId: string }
+  | { type: "setFlag"; flag: string; value: boolean | number | string };
 
 export interface CommandResult {
   output: string[];

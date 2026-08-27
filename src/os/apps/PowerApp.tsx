@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { useGameStore } from "@/store";
-import { canEnable, headroomKw, totalConsumptionKw } from "@/game/power/budget";
+import { canEnable, headroomKw, isLocked, totalConsumptionKw } from "@/game/power/budget";
 import { POWER_SYSTEMS, STATION_POWER_BUDGET_KW } from "@content/power/systems";
 import { audioManager } from "@/audio/manager";
 import "./PowerApp.css";
 
 export default function PowerApp() {
   const powerSystems = useGameStore((s) => s.power.systems);
+  const flags = useGameStore((s) => s.story.flags);
+  const minutesElapsed = useGameStore((s) => s.time.minutesElapsed);
   const setPower = useGameStore((s) => s.setPower);
   const [deniedId, setDeniedId] = useState<string | null>(null);
 
+  const world = { flags, power: powerSystems, minutesElapsed };
   const used = totalConsumptionKw(POWER_SYSTEMS, powerSystems);
   const headroom = headroomKw(STATION_POWER_BUDGET_KW, POWER_SYSTEMS, powerSystems);
 
@@ -24,7 +27,7 @@ export default function PowerApp() {
       setDeniedId(null);
       return;
     }
-    if (!canEnable(system, POWER_SYSTEMS, powerSystems, STATION_POWER_BUDGET_KW)) {
+    if (!canEnable(system, POWER_SYSTEMS, powerSystems, STATION_POWER_BUDGET_KW, world)) {
       setDeniedId(systemId);
       return;
     }
@@ -42,7 +45,7 @@ export default function PowerApp() {
       </div>
       {POWER_SYSTEMS.map((system) => {
         const isOn = powerSystems[system.id] === "on";
-        const locked = Boolean(system.lockedReason);
+        const locked = isLocked(system, world);
         return (
           <div className="power-row" key={system.id}>
             <div className="power-row__info">

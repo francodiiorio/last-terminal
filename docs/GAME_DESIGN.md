@@ -15,7 +15,7 @@ Nothing in the loop happens outside the OS. There is no separate map, inventory 
 The station has a fixed power budget. Systems (Life Support, Terminal, Cameras, Communications, Security, Laboratory, Navigation — see `content/` for the authoritative list and numbers) each draw a fixed load and can be toggled on/off from the Power app or via the `power` terminal command. Total available power is less than the sum of every system's draw, so **the player can never run everything at once** — this is enforced, not just discouraged.
 
 Consequences of power decisions are diegetic, not a stat penalty:
-- Disabling Life Support risks alarms/warnings and is gated behind confirmation.
+- Disabling Life Support fires a one-time critical warning notification the first time it goes offline (the `life-support-offline-warning` event) — there's no confirmation dialog blocking it; the tension comes from the consequence, not from friction. It's a real move players may need: Communications only fits the power budget with Life Support off.
 - Enabling one system may require disabling another (insufficient headroom).
 - Some files, commands, and apps are unreachable without specific systems powered (e.g., the security archive requires Security powered).
 - Power state is one of the condition types the event engine can check, so the story can react to *which* systems the player chose to run, not just to time passing.
@@ -30,6 +30,8 @@ No real-world timers. An internal clock advances only in response to player acti
 |---|---|
 | Open camera feed | +1 min |
 | Decrypt a file | +4 min |
+| Scan a sector | +3 min |
+| Reroute power | +3 min |
 | Run a diagnostic | +6 min |
 | Restart a system | +12 min |
 
@@ -37,7 +39,7 @@ Elapsed time is itself a condition type events can key off (e.g., "don't fire th
 
 ## Terminal
 
-A real command line, not a menu dressed as one. See `ARCHITECTURE.md` for the parser/command/UI separation. Initial commands: `help`, `status`, `ls`, `cd`, `cat`, `clear`, `power`, `whoami`. Additional commands (`scan`, `camera`, `decrypt`, `route`, `diagnostic`, ...) are unlocked narratively and added as content, not engine changes — see the `terminal-command` skill.
+A real command line, not a menu dressed as one. See `ARCHITECTURE.md` for the parser/command/UI separation. Always-available commands: `help`, `status`, `ls`, `cd`, `cat`, `clear`, `power`, `whoami`. Narratively-unlocked commands: `scan`, `camera`, `decrypt`, `route`, `diagnostic` — all five unlock together the first time the player reads the engineering log (`diagnostic-tools-unlocked` event), each tied to a real consequence (scan clears Laboratory's seal, diagnostic+route repairs and unlocks Communications, decrypt reveals the encrypted archive survey, camera resolves the Sector C red herring). Further commands are added as content, not engine changes — see the `terminal-command` skill.
 
 ## Filesystem
 
@@ -45,7 +47,7 @@ A declarative virtual filesystem (`content/files`) mirroring the station's struc
 
 ## Camera feed
 
-A station app showing a small set of static/looping camera views gated by the Cameras power system. In the vertical slice this may be represented minimally (even a single feed) — the important thing is that it consumes power and can surface a notification-worthy event (e.g., "movement detected"), not that it's fully built out yet.
+A station app (plus the `camera` terminal command, reading the same `content/cameras/feeds.ts` data) showing text-based sensor readouts gated by the Cameras power system — no video assets, consistent with the station's low-bandwidth reserve-power state. Three feeds ship in Milestone 1: Sector C, Engineering Bay, Docking Bay. Viewing Sector C after the security-power motion alert has fired resolves that red herring in-fiction (a structural sensor glitch, not an intruder) via the `sector-c-explained` event.
 
 ## Unlocks
 

@@ -1,21 +1,20 @@
 # ROADMAP.md
 
-## Milestone 0 — Vertical slice (current)
+## Milestone 0 — Vertical slice (done)
 
-The smallest playable end-to-end experience: boot → desktop → terminal → find the engineering log → discover the security archive is locked → make a real power tradeoff to power it → read a contradictory record → trigger a conditioned event → receive an unexpected message → clear demo-end screen. Everything (docs, agents, skills, engine, OS shell, content, tests) needed to ship this is in scope now; nothing past it is.
+The smallest playable end-to-end experience: boot → desktop → terminal → find the engineering log → discover the security archive is locked → make a real power tradeoff to power it → read a contradictory record → trigger a conditioned event → receive an unexpected message → clear demo-end screen. Shipped: docs, agents, skills, engine, OS shell, content, unit + E2E tests.
 
-## Milestone 1 — Full power & filesystem systems
+## Milestone 1 — Full power & filesystem systems (done)
 
-- All seven power systems live with real consequences for each (not just Security).
-- Full filesystem per `docs/lore/STATION.md` sectors, populated with the next tier of `docs/lore/TIMELINE.md` events (through Bakke's confirmed fate).
-- Camera app with multiple feeds and a movement-detection event chain (paying off the Sector C red herring, per `docs/lore/MYSTERY.md`).
-- More terminal commands: `scan`, `camera`, `decrypt`, `route`, `diagnostic`.
+- Communications and Laboratory now unlock through real command sequences rather than being permanently inert: `scan laboratory` clears Laboratory's structural seal; `diagnostic communications` then `route communications` repairs and unlocks Communications. Powering Communications (120kW) forces a genuine tradeoff — it only fits the budget with Life Support switched off, which fires a one-time critical warning. Navigation stays permanently locked by design (see `docs/lore/TIMELINE.md` — the station isn't under thrust in this arc; documented in `content/power/systems.ts`), so "all seven systems" means six with real consequences and one deliberately inert.
+- Filesystem populated with the next tier of `docs/lore/TIMELINE.md` content: a station-wide deep-watch stasis status log (confirms Bakke's death without resolving the other four crew fates, per `docs/lore/MYSTERY.md`'s "must stay open" list), personnel files for the rest of the crew, Concord's correspondence revealing the cover-story directive (gated behind powering Communications), and an encrypted archive survey file revealing Tantalus's pre-station anomaly (gated behind powering Laboratory + `decrypt`).
+- Camera app (GUI + `camera` terminal command) with three feeds; viewing the Sector C feed after the motion alert has fired pays off the red herring from the vertical slice with an in-fiction explanation (a structural sensor glitch, not an intruder).
+- New terminal commands, all real: `scan`, `camera`, `decrypt`, `route`, `diagnostic`. Unlocked together once the player reads the first piece of evidence (the engineering log).
 
 ## Milestone 2 — Comms & CASSIUS
 
-- Communications app: inbox, outbound drafts, Concord correspondence.
-- CASSIUS becomes a legible in-fiction presence through notifications and terminal responses reflecting its directive conflict.
-- Decrypt/route mechanics gate deeper archive material.
+- Communications app (GUI): inbox/reader for correspondence beyond the single file added in Milestone 1, outbound drafts.
+- CASSIUS becomes a legible in-fiction presence through more notifications and terminal responses reflecting its directive conflict, not just the handful of one-off lines shipped so far.
 
 ## Milestone 3 — Endings
 

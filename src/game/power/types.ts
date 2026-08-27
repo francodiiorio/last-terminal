@@ -1,4 +1,4 @@
-import type { PowerState } from "@/core/events/types";
+import type { Condition, PowerState } from "@/core/events/types";
 
 export interface PowerSystemDef {
   id: string;
@@ -7,8 +7,14 @@ export interface PowerSystemDef {
   /** lower = more essential; used for display ordering only, not enforced by the engine */
   priority: number;
   defaultOn: boolean;
-  /** if present, the system cannot be enabled at all and this message explains why (e.g. storm/cascade damage) */
+  /** if present, the system starts locked and this message explains why (e.g. cascade damage) */
   lockedReason?: string;
+  /**
+   * If present alongside `lockedReason`, the system unlocks (becomes a normal toggle) once these
+   * conditions hold -- typically flags set by a command sequence (see docs/GAME_DESIGN.md). If
+   * `lockedReason` is set with no `unlockRequires`, the system is locked for the whole session.
+   */
+  unlockRequires?: Condition[];
   description: string;
 }
 

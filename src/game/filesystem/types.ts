@@ -10,4 +10,6 @@ export interface FileSystemNode {
   requires?: Condition[];
   /** file body, one entry per line. Only meaningful for type "file". */
   body?: string[];
+  /** if true, `cat` refuses to print the body until the `decrypt` command has run on this file. */
+  encrypted?: boolean;
 }

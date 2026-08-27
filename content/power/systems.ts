@@ -45,7 +45,8 @@ export const POWER_SYSTEMS: PowerSystemDef[] = [
     consumptionKw: 120,
     priority: 4,
     defaultOn: false,
-    lockedReason: "ARRAY OFFLINE — CASCADE DAMAGE. Repair required before this system can draw power.",
+    lockedReason: "ARRAY OFFLINE — CASCADE DAMAGE. Run 'diagnostic communications', then 'route communications' to repair.",
+    unlockRequires: [{ type: "flag", flag: "communicationsRepaired", equals: true }],
     description: "Primary dish, deep-space relay, Concord correspondence.",
   },
   {
@@ -54,7 +55,8 @@ export const POWER_SYSTEMS: PowerSystemDef[] = [
     consumptionKw: 65,
     priority: 5,
     defaultOn: false,
-    lockedReason: "SECTOR SEALED — pending structural inspection.",
+    lockedReason: "SECTOR SEALED — pending structural inspection. Run 'scan laboratory' to clear it.",
+    unlockRequires: [{ type: "flag", flag: "labStructuralClear", equals: true }],
     description: "Signal analysis and physical sample equipment.",
   },
   {
