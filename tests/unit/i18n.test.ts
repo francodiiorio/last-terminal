@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { useGameStore } from "@/store";
-import { pick, LANGUAGES, DEFAULT_LANGUAGE, type Localized } from "@/core/language";
+import { pick, LANGUAGES, DEFAULT_LANGUAGE, loadStoredLanguage, storeLanguage, type Localized } from "@/core/language";
 import { EN } from "@/i18n/en";
 import { ES_AR } from "@/i18n/es-AR";
 
@@ -35,6 +35,26 @@ describe("pick()", () => {
 
   it("DEFAULT_LANGUAGE is included in LANGUAGES", () => {
     expect(LANGUAGES).toContain(DEFAULT_LANGUAGE);
+  });
+});
+
+describe("loadStoredLanguage() / storeLanguage()", () => {
+  beforeEach(() => {
+    window.localStorage.removeItem("last-terminal:language");
+  });
+
+  it("round-trips a stored language", () => {
+    storeLanguage("es-AR");
+    expect(loadStoredLanguage()).toBe("es-AR");
+  });
+
+  it("falls back to DEFAULT_LANGUAGE when nothing is stored", () => {
+    expect(loadStoredLanguage()).toBe(DEFAULT_LANGUAGE);
+  });
+
+  it("falls back to DEFAULT_LANGUAGE for a corrupted stored value", () => {
+    window.localStorage.setItem("last-terminal:language", "fr");
+    expect(loadStoredLanguage()).toBe(DEFAULT_LANGUAGE);
   });
 });
 
@@ -86,18 +106,29 @@ describe("terminal command output follows the settings language", () => {
   });
 });
 
-describe("save/load round-trips the language setting", () => {
+describe("language is a standalone localStorage preference, not part of the save snapshot", () => {
   beforeEach(() => {
     useGameStore.getState().newGame();
+    window.localStorage.removeItem("last-terminal:language");
   });
 
-  it("persists the chosen language through exportSnapshot/loadSnapshot", () => {
+  it("setLanguage persists to localStorage directly", () => {
+    useGameStore.getState().setLanguage("es-AR");
+    expect(window.localStorage.getItem("last-terminal:language")).toBe("es-AR");
+  });
+
+  it("exportSnapshot does not include the language preference", () => {
     useGameStore.getState().setLanguage("es-AR");
     const snapshot = useGameStore.getState().exportSnapshot();
-    expect(snapshot.settings.language).toBe("es-AR");
+    expect(snapshot.settings).not.toHaveProperty("language");
+  });
+
+  it("loadSnapshot does not change the current language", () => {
+    useGameStore.getState().setLanguage("es-AR");
+    const snapshot = useGameStore.getState().exportSnapshot();
 
     useGameStore.getState().setLanguage("en");
     useGameStore.getState().loadSnapshot(snapshot);
-    expect(useGameStore.getState().settings.language).toBe("es-AR");
+    expect(useGameStore.getState().settings.language).toBe("en");
   });
 });

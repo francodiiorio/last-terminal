@@ -18,7 +18,7 @@ export interface GameSnapshot {
   apps: { unlockedIds: string[] };
   terminal: { unlockedCommands: string[]; history: string[] };
   time: { minutesElapsed: number };
-  settings: { volume: number; muted: boolean; reducedMotion: boolean; language: Language };
+  settings: { volume: number; muted: boolean; reducedMotion: boolean };
 }
 
 export interface GameActions {

@@ -14,6 +14,7 @@ import { parseCommandLine } from "@/core/commands/parser";
 import type { CommandContext, CommandDispatchAction, CommandGameStateView } from "@/core/commands/types";
 import { createCommandRegistry } from "@/game/commands/registry";
 import { stringsFor } from "@/i18n";
+import { loadStoredLanguage, storeLanguage } from "@/core/language";
 
 const commandRegistry = createCommandRegistry();
 
@@ -61,7 +62,7 @@ export const useGameStore = create<GameState>()((set, get) => {
     terminal: { ...INITIAL_TERMINAL_STATE },
     apps: { ...INITIAL_APPS_STATE },
     time: { ...INITIAL_TIME_STATE },
-    settings: { ...INITIAL_SETTINGS_STATE },
+    settings: { ...INITIAL_SETTINGS_STATE, language: loadStoredLanguage() },
     station: { ...INITIAL_STATION_STATE },
 
     bootComplete: () => {
@@ -232,7 +233,10 @@ export const useGameStore = create<GameState>()((set, get) => {
       audioManager.setMuted(muted);
     },
     setReducedMotion: (value) => set((s) => ({ settings: { ...s.settings, reducedMotion: value } })),
-    setLanguage: (language) => set((s) => ({ settings: { ...s.settings, language } })),
+    setLanguage: (language) => {
+      set((s) => ({ settings: { ...s.settings, language } }));
+      storeLanguage(language);
+    },
     dismissNotification: (id) =>
       set((s) => ({ station: { ...s.station, notifications: s.station.notifications.filter((n) => n.id !== id) } })),
 
@@ -257,12 +261,7 @@ export const useGameStore = create<GameState>()((set, get) => {
         apps: { unlockedIds: s.apps.unlockedIds },
         terminal: { unlockedCommands: s.terminal.unlockedCommands, history: s.terminal.history },
         time: { minutesElapsed: s.time.minutesElapsed },
-        settings: {
-          volume: s.settings.volume,
-          muted: s.settings.muted,
-          reducedMotion: s.settings.reducedMotion,
-          language: s.settings.language,
-        },
+        settings: { volume: s.settings.volume, muted: s.settings.muted, reducedMotion: s.settings.reducedMotion },
       };
     },
 
@@ -278,11 +277,13 @@ export const useGameStore = create<GameState>()((set, get) => {
         apps: { ...s.apps, unlockedIds: snapshot.apps.unlockedIds },
         terminal: { ...s.terminal, unlockedCommands: snapshot.terminal.unlockedCommands, history: snapshot.terminal.history, output: [] },
         time: { minutesElapsed: snapshot.time.minutesElapsed },
+        // language is a standalone localStorage preference (src/core/language.ts), not part of
+        // the snapshot -- loading a save must not change it.
         settings: {
+          ...s.settings,
           volume: snapshot.settings.volume,
           muted: snapshot.settings.muted,
           reducedMotion: snapshot.settings.reducedMotion,
-          language: snapshot.settings.language,
         },
         station: { scene: "desktop", notifications: [] },
       }));
