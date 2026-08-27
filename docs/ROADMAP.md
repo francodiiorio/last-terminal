@@ -41,6 +41,12 @@ An exploratory playthrough (edge-case commands, rapid power toggling, window dra
 
 Confirmed *not* bugs during the same pass: the ending overlay can't be bypassed by keyboard (Tab from "Restart Session" doesn't reach anything underneath, and typing while unfocused does nothing); no power-budget sequence produces a true softlock, since every allocation is reversible.
 
+A second playthrough (GUI-driven this time: Camera/Comms app reactivity to power changes, multiple manual save slots, keyboard-only navigation, replaying to a second ending in one continuous session) found one more:
+
+- **`power`'s arguments weren't case-insensitive, unlike `scan`/`camera`/`route`/`diagnostic`.** Those four commands lowercase their target argument; `power` didn't, so `power CAMERAS off` failed with "unknown system: CAMERAS" while the equivalent `SCAN LABORATORY` worked fine. Fixed by lowercasing both the system id and on/off action in `power`'s handler; regression-tested in `tests/unit/command-formatting.test.ts`.
+
+Confirmed *not* bugs: Camera and Comms apps correctly go to their "offline" empty state live if their power system is switched off while the app is already open, with no stale content left showing; creating multiple named manual saves works correctly once each save's own confirmation is awaited (an artificial rapid-double-click race turned out to be untriggerable in practice, since `window.prompt` is a blocking modal -- a real second click can't land until the first prompt is dismissed); "Restart Session" and both "New Session" entry points intentionally skip the boot animation and go straight to the desktop, and correctly leave zero residual state (station time, power, flags) between playthroughs.
+
 ## Explicitly out of scope until named otherwise
 
 - Any 3D/avatar movement.

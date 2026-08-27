@@ -69,3 +69,21 @@ describe("camera feed list alignment (regression: 'engineering-bay' broke padEnd
     expect(longRow).toBeDefined();
   });
 });
+
+describe("power command argument case-insensitivity (regression: only the command name was lowercased, not its args)", () => {
+  it("accepts an uppercase system id", () => {
+    const result = run("power", ["CAMERAS"]);
+    expect(result.output.join(" ")).not.toMatch(/unknown system/);
+    expect(result.output.join(" ")).toMatch(/Cameras/);
+  });
+
+  it("accepts an uppercase on/off action", () => {
+    const result = run("power", ["cameras", "OFF"]);
+    expect(result.output.join(" ")).toBe("Cameras: OFFLINE");
+  });
+
+  it("accepts fully uppercase system + action, matching scan/camera/route/diagnostic's case-insensitivity", () => {
+    const result = run("power", ["CAMERAS", "OFF"]);
+    expect(result.output.join(" ")).toBe("Cameras: OFFLINE");
+  });
+});

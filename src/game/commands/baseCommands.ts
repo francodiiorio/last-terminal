@@ -138,7 +138,8 @@ const powerCommand: CommandDefinition = {
   run: (ctx) => {
     const state = ctx.getState();
     const world = worldFromCtx(ctx);
-    const [systemId, action] = ctx.args;
+    const systemId = ctx.args[0]?.toLowerCase();
+    const action = ctx.args[1]?.toLowerCase();
 
     if (!systemId) {
       const used = STATION_POWER_BUDGET_KW - headroomKw(STATION_POWER_BUDGET_KW, POWER_SYSTEMS, state.power);
