@@ -8,6 +8,7 @@ export const TIME_COSTS = {
   decryptFile: 4,
   scanSector: 3,
   reroutePower: 3,
+  sendMessage: 2,
   runDiagnostic: 6,
   restartSystem: 12,
 } as const;

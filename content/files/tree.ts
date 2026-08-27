@@ -4,10 +4,16 @@ import { SYSTEM_STATUS_LOG } from "@content/logs/system-status-log";
 import { REYES_PERSONAL_LOG } from "@content/logs/reyes-personal-log";
 import { SECURITY_INCIDENT_REPORT } from "@content/logs/security-incident-report";
 import { DEEPWATCH_STATUS_LOG } from "@content/logs/deepwatch-status-log";
-import { CONCORD_CORRESPONDENCE } from "@content/logs/concord-correspondence";
+import { CASSIUS_INTERNAL_NOTE } from "@content/logs/cassius-internal-note";
 import { TANTALUS_SURVEY } from "@content/logs/tantalus-survey";
-import { UNKNOWN_TRANSMISSION } from "@content/emails/unknown-transmission";
+import { MESSAGES } from "@content/emails/messages";
 import { CREW } from "@content/characters/crew";
+
+function message(id: string) {
+  const found = MESSAGES.find((m) => m.id === id);
+  if (!found) throw new Error(`content/files/tree.ts: no MESSAGES entry with id "${id}"`);
+  return found;
+}
 
 /**
  * Personnel files for every crew member except Reyes (whose personal log is its own file
@@ -42,6 +48,17 @@ export const FILESYSTEM_NODES: FileSystemNode[] = [
     type: "file",
     name: "deepwatch-status.log",
     body: DEEPWATCH_STATUS_LOG.body,
+  },
+  {
+    id: "cassius-internal-note",
+    path: "/system/cassius-internal.log",
+    type: "file",
+    name: "cassius-internal.log",
+    body: CASSIUS_INTERNAL_NOTE.body,
+    requires: [
+      { type: "power", system: "communications", state: "on" },
+      { type: "flag", flag: "read:concord-correspondence", equals: true },
+    ],
   },
 
   { id: "dir-crew", path: "/crew", type: "dir", name: "crew" },
@@ -79,16 +96,24 @@ export const FILESYSTEM_NODES: FileSystemNode[] = [
     path: "/communications/incoming.log",
     type: "file",
     name: "incoming.log",
-    body: UNKNOWN_TRANSMISSION.body,
-    requires: [{ type: "flag", flag: "unknownTransmissionReceived", equals: true }],
+    body: message("communications-incoming").body,
+    requires: message("communications-incoming").requires,
   },
   {
     id: "concord-correspondence",
     path: "/communications/concord-correspondence.log",
     type: "file",
     name: "concord-correspondence.log",
-    body: CONCORD_CORRESPONDENCE.body,
-    requires: [{ type: "power", system: "communications", state: "on" }],
+    body: message("concord-correspondence").body,
+    requires: message("concord-correspondence").requires,
+  },
+  {
+    id: "concord-status-request",
+    path: "/communications/status-request.log",
+    type: "file",
+    name: "status-request.log",
+    body: message("concord-status-request").body,
+    requires: message("concord-status-request").requires,
   },
 
   { id: "dir-archive", path: "/archive", type: "dir", name: "archive" },

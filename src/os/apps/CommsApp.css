@@ -1,0 +1,107 @@
+.comms-app {
+  width: 560px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.comms-app__inbox {
+  display: flex;
+  height: 220px;
+  gap: var(--space-3);
+}
+
+.comms-app__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 200px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  border-right: 1px solid var(--color-border);
+  padding-right: var(--space-2);
+}
+
+.comms-app__message-button {
+  background: transparent;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-dim);
+  text-align: left;
+  padding: var(--space-2);
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.comms-app__message-button--active {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.comms-app__message-from {
+  color: var(--color-text);
+  font-size: 11px;
+}
+
+.comms-app__message-meta {
+  color: var(--color-text-faint);
+  font-size: 10px;
+}
+
+.comms-app__empty {
+  color: var(--color-text-faint);
+  font-size: 12px;
+}
+
+.comms-app__reader {
+  flex: 1;
+  overflow-y: auto;
+  font-size: 12px;
+  white-space: pre-wrap;
+  color: var(--color-text);
+}
+
+.comms-app__reader p {
+  margin: 0 0 var(--space-1) 0;
+}
+
+.comms-app__drafts {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.comms-app__draft-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: 11px;
+}
+
+.comms-app__draft-button {
+  background: transparent;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-dim);
+  padding: 3px var(--space-2);
+  font-size: 11px;
+}
+
+.comms-app__draft-button:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.comms-app__draft-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.comms-app__confirmation {
+  color: var(--color-accent);
+  font-size: 11px;
+}

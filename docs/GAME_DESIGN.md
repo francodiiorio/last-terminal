@@ -29,6 +29,7 @@ No real-world timers. An internal clock advances only in response to player acti
 | Action | Cost |
 |---|---|
 | Open camera feed | +1 min |
+| Send a message | +2 min |
 | Decrypt a file | +4 min |
 | Scan a sector | +3 min |
 | Reroute power | +3 min |

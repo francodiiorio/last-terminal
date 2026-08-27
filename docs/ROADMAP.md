@@ -11,10 +11,11 @@ The smallest playable end-to-end experience: boot → desktop → terminal → f
 - Camera app (GUI + `camera` terminal command) with three feeds; viewing the Sector C feed after the motion alert has fired pays off the red herring from the vertical slice with an in-fiction explanation (a structural sensor glitch, not an intruder).
 - New terminal commands, all real: `scan`, `camera`, `decrypt`, `route`, `diagnostic`. Unlocked together once the player reads the first piece of evidence (the engineering log).
 
-## Milestone 2 — Comms & CASSIUS
+## Milestone 2 — Comms & CASSIUS (done)
 
-- Communications app (GUI): inbox/reader for correspondence beyond the single file added in Milestone 1, outbound drafts.
-- CASSIUS becomes a legible in-fiction presence through more notifications and terminal responses reflecting its directive conflict, not just the handful of one-off lines shipped so far.
+- Communications app (GUI): inbox reader (three messages: the MD 90 cover-story directive, a MD 205 routine status request, and the vertical slice's unknown transmission) plus two outbound draft templates (`routine-status-update`, `incident-report`) rather than free-text composition — sending is a real, data-driven choice, not narrative text the engine has to interpret. Reading a message via the app marks the same `read:<id>` flag `cat` does (both paths share one `content/emails/messages.ts` source), so GUI and terminal stay behaviorally identical.
+- CASSIUS is now a legible presence beyond one-off lines: `/system/cassius-internal.log` is an off-the-record process note (gated behind Communications powered + having read the MD 90 correspondence) where CASSIUS documents its own directive conflict in its own procedural voice; finding it and sending the truthful incident report each draw a distinct one-time CASSIUS reaction event.
+- Not done in this pass: a full send/receive simulation with delayed light-lag delivery — outbound drafts confirm immediately with in-fiction "ETA 6-14h" flavor text rather than actually delaying anything, since there's no real-time mechanic to hook it to (see Narrative time in `docs/GAME_DESIGN.md`).
 
 ## Milestone 3 — Endings
 
