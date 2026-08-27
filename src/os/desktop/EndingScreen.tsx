@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useGameStore } from "@/store";
 import { pick } from "@/core/language";
@@ -13,6 +14,19 @@ export default function EndingScreen() {
   const newGame = useGameStore((s) => s.newGame);
   const bootComplete = useGameStore((s) => s.bootComplete);
   const reducedMotion = useGameStore((s) => s.settings.reducedMotion);
+  const restartButtonRef = useRef<HTMLButtonElement>(null);
+
+  // The dialog's overlay blocks clicks but a modal must also move focus into itself, or
+  // whatever had focus underneath (typically the terminal input) stays focused and keyboard
+  // input keeps reaching an element the player can no longer see. Deliberately deferred rather
+  // than focused synchronously on mount: this mount is itself caused by the very keydown that
+  // ran 'conclude', and that key's keyup hasn't been dispatched yet -- focusing the button
+  // immediately makes that same still-in-flight Enter also activate Restart, instantly
+  // restarting the session before the player ever sees the ending.
+  useEffect(() => {
+    const timer = setTimeout(() => restartButtonRef.current?.focus(), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   const ending = ENDINGS.find((e) => e.id === endingId);
   if (!ending) return null;
@@ -39,7 +53,7 @@ export default function EndingScreen() {
             <p key={i}>{line}</p>
           ))}
         </div>
-        <button className="ending-screen__button" onClick={handleRestart}>
+        <button ref={restartButtonRef} className="ending-screen__button" onClick={handleRestart}>
           {t.ending.restartButton}
         </button>
       </motion.div>

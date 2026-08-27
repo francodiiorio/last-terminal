@@ -73,3 +73,24 @@ test("Resonance: no report sent, Life Support left off through 40+ minutes of st
   await run(page, "conclude");
   await expect(page.getByText("ENDING -- RESONANCE")).toBeVisible();
 });
+
+test("regression: the ending screen moves keyboard focus off the terminal input, so it isn't left as a dead but live control surface behind the modal", async ({
+  page,
+}) => {
+  await reachClimax(page);
+
+  const terminalInput = page.getByLabel("Terminal command input");
+  await expect(terminalInput).toBeFocused();
+
+  await run(page, "conclude");
+  await expect(page.getByText("ENDING -- SILENCE")).toBeVisible();
+
+  // focus must have moved off the terminal input and onto the ending screen's Restart button
+  await expect(terminalInput).not.toBeFocused();
+  await expect(page.getByRole("button", { name: "Restart Session" })).toBeFocused();
+
+  // pressing Enter now activates the focused Restart button (standard button semantics), not a
+  // terminal command hidden behind the modal
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("button", { name: "New Session" })).toBeVisible();
+});

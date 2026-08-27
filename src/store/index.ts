@@ -139,6 +139,12 @@ export const useGameStore = create<GameState>()((set, get) => {
     },
 
     runCommand: (input) => {
+      // Once an ending has fired, the session is over -- the terminal must stop being a live
+      // control surface, even though the ending screen's overlay keeps keyboard focus on it
+      // (it blocks clicks but never moves focus). No further input should be recorded or acted
+      // on, not even echoed.
+      if (get().story.endingId !== null) return;
+
       const cwdAtInput = get().filesystem.cwd;
       set((s) => ({
         terminal: {
