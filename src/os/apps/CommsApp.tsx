@@ -81,7 +81,7 @@ export default function CommsApp() {
           const available = evaluateConditions(draft.requires, world);
           return (
             <div className="comms-app__draft-row" key={draft.id}>
-              <span>{pick(draft.label, language)}</span>
+              <span className="comms-app__draft-label">{pick(draft.label, language)}</span>
               <button
                 className="comms-app__draft-button"
                 onClick={() => sendDraft(draft.id)}

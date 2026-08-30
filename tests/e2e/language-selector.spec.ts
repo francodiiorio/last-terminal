@@ -49,6 +49,40 @@ test("language choice is a standalone browser preference: it survives reload bef
   await expect(page.getByRole("button", { name: "Nueva Sesión" })).toBeVisible();
 });
 
+test("regression: a locked power system's longer Spanish label ('BLOQUEADO') doesn't overflow its button or the window", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "New Session" }).click();
+  await page.getByRole("button", { name: "SETTINGS", exact: true }).click();
+  await page.getByRole("radio", { name: "Español (Argentina)" }).click();
+  await page.getByRole("button", { name: "RED ELÉCTRICA", exact: true }).click();
+
+  const win = page.locator('[aria-label="RED ELÉCTRICA"]');
+  await expect(win).toBeVisible();
+  // the toggle's accessible name comes from an aria-label describing the action, not its visible
+  // text, so target it by CSS class + visible text instead of role/name.
+  const lockedButton = win.locator(".power-row__toggle", { hasText: "BLOQUEADO" }).first();
+  await expect(lockedButton).toBeVisible();
+
+  const metrics = await page.evaluate(() => {
+    const win = document.querySelector('[aria-label="RED ELÉCTRICA"]')!;
+    const btn = [...win.querySelectorAll(".power-row__toggle")].find((b) => b.textContent === "BLOQUEADO")!;
+    return {
+      winRight: win.getBoundingClientRect().right,
+      btnRight: btn.getBoundingClientRect().right,
+      // if the label overflows its own box, scrollWidth exceeds clientWidth
+      btnScrollWidth: btn.scrollWidth,
+      btnClientWidth: btn.clientWidth,
+    };
+  });
+
+  // the button's own box must be wide enough to hold its text, not clipping it
+  expect(metrics.btnScrollWidth).toBeLessThanOrEqual(metrics.btnClientWidth);
+  // and the button itself must stay inside the window, not spill past its edge
+  expect(metrics.btnRight).toBeLessThanOrEqual(metrics.winRight);
+});
+
 test("language choice is independent of loading a save: loading one does not revert it", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "New Session" }).click();
